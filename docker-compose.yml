@@ -15,15 +15,15 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - './go-app://app/go'
+      - './go-app:/app/go'
     tty: true
     stdin_open: true
 
   db:
     image: mysql:8.0
     volumes:
-      - ./docker/db/data:/var/lib/mysql
-      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - './docker/db/data:/var/lib/mysql'
+      - './docker/db/my.cnf:/etc/mysql/conf.d/my.cnf'
     # MYSQL_ROOT_PASSWORDのみをenvファイルで設定
     env_file:
       - variables.env
