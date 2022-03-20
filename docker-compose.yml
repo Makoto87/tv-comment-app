@@ -29,4 +29,3 @@ services:
       - variables.env
     ports:
       - '3306:3306'
-    
