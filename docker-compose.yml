@@ -13,9 +13,9 @@ services:
   go:
     build: ./docker/golang
     ports:
-      -'8080:8080'
+      - '8000:8000'
     volumes:
       - './go-app://app/go'
     tty: true
     stdin_open: true
-  
+    
