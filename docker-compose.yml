@@ -22,10 +22,11 @@ services:
   db:
     image: mysql:8.0
     volumes:
-    - ./docker/db/data:/var/lib/mysql
-    - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
-    environment:
-      MYSQL_ROOT_PASSWORD: root
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    # MYSQL_ROOT_PASSWORDのみをenvファイルで設定
+    env_file:
+      - variables.env
     ports:
       - '3306:3306'
     
