@@ -2,7 +2,7 @@ version: '3'
 
 services:
   react-ts:
-    build: ./docker/react-ts
+    build: ./react-ts-app
     ports:
       - '3000:3000'
     volumes:
@@ -11,7 +11,7 @@ services:
     stdin_open: true
     
   go:
-    build: ./docker/golang
+    build: ./go-app
     ports:
       - '8000:8000'
     volumes:
@@ -22,8 +22,8 @@ services:
   db:
     image: mysql:8.0
     volumes:
-      - './docker/db/data:/var/lib/mysql'
-      - './docker/db/my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './db/data:/var/lib/mysql'
+      - './db/my.cnf:/etc/mysql/conf.d/my.cnf'
     # MYSQL_ROOT_PASSWORDのみをenvファイルで設定
     env_file:
       - variables.env
