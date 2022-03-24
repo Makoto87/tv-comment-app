@@ -5,8 +5,6 @@ services:
     build: ./react-ts-app
     ports:
       - '3000:3000'
-    volumes:
-      - './react-ts-app:/app/react-ts'
     tty: true
     stdin_open: true
     
@@ -14,8 +12,6 @@ services:
     build: ./go-app
     ports:
       - '8000:8000'
-    volumes:
-      - './go-app:/app/go'
     tty: true
     stdin_open: true
 
