@@ -1,10 +1,11 @@
 import { SearchIcon } from '@chakra-ui/icons'
-import { Box, Button, Container, Flex, Heading, Input, InputGroup, InputRightAddon, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Heading, HStack, Input, InputGroup, InputRightAddon, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 
 export const Home = () => {
       return (
             <>
-                  <InputGroup size='lg' p={8} paddingBottom={5}>
+                  <Heading as='h1' size='lg' mt={5} pl={8} pb={5}>TV Comment App</Heading>
+                  <InputGroup px={8} paddingBottom={5} size='lg' >
                         <Input bg="white" placeholder='検索' />
                         <InputRightAddon children={<SearchIcon />} />
                   </InputGroup>
