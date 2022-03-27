@@ -1,5 +1,5 @@
 import { SearchIcon } from '@chakra-ui/icons'
-import { Box, Button, Center, Flex, Heading, HStack, Input, InputGroup, InputRightAddon, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Heading, HStack, IconButton, Input, InputGroup, InputRightAddon, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 
 export const Home = () => {
       return (
@@ -7,7 +7,7 @@ export const Home = () => {
                   <Heading as='h1' size='lg' mt={5} pl={8} pb={5}>TV Comment App</Heading>
                   <InputGroup px={8} paddingBottom={5} size='lg' >
                         <Input bg="white" placeholder='検索' />
-                        <InputRightAddon children={<SearchIcon />} />
+                        <InputRightAddon p={0} children={<IconButton aria-label='Search database' icon={<SearchIcon />} />} />
                   </InputGroup>
 
                   <Flex paddingX={8} w='100%'>
