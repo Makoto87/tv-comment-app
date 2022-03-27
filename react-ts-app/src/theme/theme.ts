@@ -4,7 +4,7 @@ const theme = extendTheme({
       styles: {
             global: {
                   body: {
-                        backgroundColor: "blue.100",
+                        backgroundColor: "cyan.50",
                         color: "gray.600"
                   }
             }
