@@ -1,17 +1,17 @@
 import { SearchIcon } from '@chakra-ui/icons'
-import { Box, Button, Container, Flex, Heading, HStack, IconButton, Input, InputGroup, InputLeftAddon, InputRightAddon, VStack } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Heading, Input, InputGroup, InputRightAddon, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 
 export const Home = () => {
       return (
             <>
-                  <InputGroup size='lg' p={8}>
+                  <InputGroup size='lg' p={8} paddingBottom={5}>
                         <Input bg="white" placeholder='検索' />
                         <InputRightAddon children={<SearchIcon />} />
                   </InputGroup>
 
-                  <Flex paddingX={8}>
+                  <Flex paddingX={8} w='100%'>
                         {/* 新規投稿ボタンとカテゴリーリスト */}
-                        <VStack w='250px' spacing={5} paddingTop={3}>
+                        <VStack w='15%' spacing={5} paddingTop={10}>
                               <Button colorScheme='teal' size='lg' w='100%'>
                                     新規投稿
                               </Button>
@@ -28,14 +28,16 @@ export const Home = () => {
                               </Box>
                         </VStack>
 
-                        <div>
-                              <h3>ホーム</h3>
-                              <div>
-                                    <Button colorScheme='teal' size='md'>
-                                          バラエティ
-                                    </Button>
-                              </div>
-                        </div>
+                        <VStack w='85%'>
+                              <Text w='100%' paddingX={7} fontSize='lg'>ホーム</Text>
+                              <Wrap w='95%' py={{ base: 8}} px={{ base: 10}} justify='space-around' >
+                                    <WrapItem mx='auto' p={3}>
+                                          <Button colorScheme='teal' w='300px' h='150px' fontSize='2xl'>
+                                                バラエティ
+                                          </Button>
+                                    </WrapItem>
+                              </Wrap>
+                        </VStack>
                   </Flex>
             </>
       )
