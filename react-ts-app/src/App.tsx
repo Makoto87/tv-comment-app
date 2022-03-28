@@ -5,11 +5,15 @@ import theme from './theme/theme';
 import { Home } from './components/pages/Home';
 import { Program } from './components/pages/Program';
 import { Comments } from './components/pages/Comments';
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from './router/Router';
 
 function App() {
 return (
       <ChakraProvider theme={theme}>
-            <Comments></Comments>
+            <BrowserRouter>
+                  <Router />
+            </BrowserRouter>
       </ChakraProvider>
     )
 }
