@@ -31,7 +31,9 @@ export const Program = () => {
                               </Breadcrumb>
 
                               {/* 放送回を表示 */}
-                              <ProgramList buttonType="comments" />
+                              <ProgramList buttonType="comments">
+                                    第135回
+                              </ProgramList>
                         </VStack>
                   </Flex>
             </HeaderLayout>

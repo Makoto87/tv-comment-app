@@ -1,6 +1,6 @@
 import { Box, Heading, VStack, Button, Stack } from "@chakra-ui/react"
 
-export const CategoryList = () => {
+export const SubList = () => {
       return (
             <Box w='100%' >
                   <Heading as='h3' size='md'>カテゴリ</Heading>

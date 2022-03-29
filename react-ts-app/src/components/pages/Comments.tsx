@@ -2,7 +2,7 @@ import { ChevronRightIcon } from "@chakra-ui/icons"
 import { Flex, VStack, Text, Button, HStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
 
-import { CategoryList } from "../parts/CategoryList"
+import { SubList } from "../parts/SubList"
 import { CommentList } from "../parts/CommentList"
 import { PostButton } from "../parts/PostButton"
 import { HeaderLayout } from "../templates/HeaderLayout"
@@ -15,7 +15,7 @@ export const Comments = () => {
                         {/* 新規投稿ボタンと放送回リスト */}
                         <VStack w={{ base: '100%', md: '15%' }} spacing={{ base: '4', md: '5'}} pt={{ base: '3', md: '10'}} pb={ {base: '6', md: '0'}}>
                               <PostButton />
-                              <CategoryList />
+                              <SubList />
                         </VStack>
 
                         <VStack w={{ base: '100%', md: '85%'}}>
