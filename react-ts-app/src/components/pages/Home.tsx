@@ -20,7 +20,7 @@ export const Home = () => {
                         {/* 番組一覧を表示 */}
                         <VStack w={{ base: '100%', md: '85%'}}>
                               <Text w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg'>ホーム</Text>
-                              <ProgramList />
+                              <ProgramList buttonType='programs' />
                         </VStack>
                   </Flex>
             </HeaderLayout>

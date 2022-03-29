@@ -1,4 +1,6 @@
-import { Flex, VStack, Text } from "@chakra-ui/react"
+import { ChevronRightIcon } from "@chakra-ui/icons"
+import { Flex, VStack, Text, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
+import { Link } from "react-router-dom"
 
 import { PostButton } from "../parts/PostButton"
 import { ProgramList } from "../parts/ProgramList"
@@ -15,11 +17,21 @@ export const Program = () => {
                               <PostButton />
                               <RangeTime />
                         </VStack>
-
-                        {/* 放送回を表示 */}
+                        
                         <VStack w={{ base: '100%', md: '85%'}}>
-                              <Text w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg'>ホーム  &gt;  放送回一覧</Text>
-                              <ProgramList />
+                              {/* パンくずリスト */}
+                              <Breadcrumb w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg' spacing='8px' separator={<ChevronRightIcon color='gray.500' />}>
+                                    <BreadcrumbItem>
+                                          <BreadcrumbLink as = { Link } to='/'>ホーム</BreadcrumbLink>
+                                    </BreadcrumbItem>
+
+                                    <BreadcrumbItem>
+                                          <BreadcrumbLink isCurrentPage>放送回</BreadcrumbLink>
+                                    </BreadcrumbItem>
+                              </Breadcrumb>
+
+                              {/* 放送回を表示 */}
+                              <ProgramList buttonType="comments" />
                         </VStack>
                   </Flex>
             </HeaderLayout>

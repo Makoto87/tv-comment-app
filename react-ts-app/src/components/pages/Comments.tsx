@@ -1,4 +1,6 @@
-import { Flex, VStack, Text } from "@chakra-ui/react"
+import { ChevronRightIcon } from "@chakra-ui/icons"
+import { Flex, VStack, Text, Button, HStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
+import { Link, useNavigate } from "react-router-dom"
 
 import { CategoryList } from "../parts/CategoryList"
 import { CommentList } from "../parts/CommentList"
@@ -16,9 +18,20 @@ export const Comments = () => {
                               <CategoryList />
                         </VStack>
 
-                        {/* 番組一覧を表示 */}
                         <VStack w={{ base: '100%', md: '85%'}}>
-                              <Text w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg'>ホーム</Text>
+                              {/* パンくずリスト */}
+                              <Breadcrumb w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg' spacing='8px' separator={<ChevronRightIcon color='gray.500' />}>
+                                    <BreadcrumbItem>
+                                          <BreadcrumbLink as = { Link } to='/'>ホーム</BreadcrumbLink>
+                                    </BreadcrumbItem>
+                                    <BreadcrumbItem>
+                                          <BreadcrumbLink as = { Link } to='/programs'>放送回</BreadcrumbLink>
+                                    </BreadcrumbItem>
+                                    <BreadcrumbItem>
+                                          <BreadcrumbLink isCurrentPage>コメント</BreadcrumbLink>
+                                    </BreadcrumbItem>
+                              </Breadcrumb>
+                              {/* コメント一覧を表示 */}
                               <CommentList />
                         </VStack>
                   </Flex>
