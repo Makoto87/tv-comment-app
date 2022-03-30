@@ -1,5 +1,5 @@
 import { Wrap, WrapItem, Button } from "@chakra-ui/react"
-import { ReactNode, VFC } from "react";
+import { memo, ReactNode, VFC } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
       titles: string[]
 }
 
-export const ProgramList: VFC<Props> = (props) => {
+export const ProgramList: VFC<Props> = memo((props) => {
       const { buttonType, titles } = props;
       const navigate = useNavigate();
       return (
@@ -21,4 +21,4 @@ export const ProgramList: VFC<Props> = (props) => {
                   ))}
             </Wrap>
       )
-}
+});

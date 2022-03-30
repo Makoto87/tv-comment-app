@@ -1,7 +1,8 @@
 import { Box, Heading, Stack, Text, Button, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack } from "@chakra-ui/react"
+import { memo } from "react";
 import { SetTime } from "./SetTime";
 
-export const RangeTime = () => {
+export const RangeTime = memo(() => {
       const setDateTexts: string[] = ["から", "まで"]
       return (
             <Box w='100%' mt='5' >
@@ -21,4 +22,4 @@ export const RangeTime = () => {
                   </VStack>
             </Box>
       )
-}
+});

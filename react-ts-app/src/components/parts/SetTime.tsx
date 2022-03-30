@@ -1,6 +1,7 @@
 import { Stack, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/react";
+import { memo } from "react";
 
-export const SetTime = () => {
+export const SetTime = memo(() => {
       const dateData: string[] = [ "年", "月", "日" ];
       return (
             <Stack direction={{ base: 'row', md: 'column' }}>
@@ -17,4 +18,4 @@ export const SetTime = () => {
                   
             </Stack>
       )
-}
+});

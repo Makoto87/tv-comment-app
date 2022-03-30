@@ -1,6 +1,7 @@
 import { Wrap, WrapItem, Button, VStack, Box, Text, Flex } from "@chakra-ui/react"
+import { memo } from "react";
 
-export const CommentList = () => {
+export const CommentList = memo(() => {
       return (
             <VStack w='95%' spacing={5} py={{ base: 8}} px={{ md: 10 }} justify='space-around' >
                   <Box bg='white' border='3px' borderWidth={5} borderColor='red.500' shadow='sm' rounded='md' w='100%'  fontSize='xl' p={5} pb={3}>
@@ -12,9 +13,8 @@ export const CommentList = () => {
                                     <Button flexGrow='1' colorScheme='red.200' variant='outline' size='sm'>Good</Button>
                                     <Text flexGrow='10' pl='3'>100</Text>
                               </Flex>
-                              
                         </Flex>
                   </Box>
             </VStack>
       )
-}
+});

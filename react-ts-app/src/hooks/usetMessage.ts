@@ -19,6 +19,5 @@ export const useMessage = () => {
                   isClosable: true
             });
       }, []);
-
       return { showMessage };
 };

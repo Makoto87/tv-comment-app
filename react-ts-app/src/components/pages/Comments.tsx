@@ -6,8 +6,9 @@ import { SubList } from "../parts/SubList"
 import { CommentList } from "../parts/CommentList"
 import { PostButton } from "../parts/PostButton"
 import { HeaderLayout } from "../templates/HeaderLayout"
+import { memo } from "react"
 
-export const Comments = () => {
+export const Comments = memo(() => {
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -37,4 +38,4 @@ export const Comments = () => {
                   </Flex>
             </HeaderLayout>
       )
-}
+});

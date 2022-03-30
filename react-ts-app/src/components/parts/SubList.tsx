@@ -1,6 +1,7 @@
 import { Box, Heading, VStack, Button, Stack } from "@chakra-ui/react"
+import { memo } from "react"
 
-export const SubList = () => {
+export const SubList = memo(() => {
       return (
             <Box w='100%' >
                   <Heading as='h3' size='md'>カテゴリ</Heading>
@@ -14,4 +15,4 @@ export const SubList = () => {
                   </Stack>
             </Box>
       )
-}
+});

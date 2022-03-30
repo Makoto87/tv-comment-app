@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from "@chakra-ui/icons"
 import { Flex, VStack, Text, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
+import { memo } from "react"
 import { Link } from "react-router-dom"
 
 import { PostButton } from "../parts/PostButton"
@@ -7,7 +8,7 @@ import { ProgramList } from "../parts/ProgramList"
 import { RangeTime } from "../parts/RangeTime"
 import { HeaderLayout } from "../templates/HeaderLayout"
 
-export const Program = () => {
+export const Program = memo(() => {
       // テストデータ
       const programNumbers: string[] = [...Array(50).fill("123")]
       return (
@@ -38,4 +39,4 @@ export const Program = () => {
                   </Flex>
             </HeaderLayout>
       )
-}
+});

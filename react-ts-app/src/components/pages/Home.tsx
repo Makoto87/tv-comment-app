@@ -5,8 +5,9 @@ import { SubList } from '../parts/SubList'
 import { PostButton } from '../parts/PostButton'
 import { ProgramList } from '../parts/ProgramList'
 import { HeaderLayout } from '../templates/HeaderLayout'
+import { memo } from 'react'
 
-export const Home = () => {
+export const Home = memo(() => {
       // テストデータ
       const programTitles: string[] = [...Array(50).fill("テスト")];
       return (
@@ -27,4 +28,4 @@ export const Home = () => {
                   </Flex>
             </HeaderLayout>
       )
-}
+});

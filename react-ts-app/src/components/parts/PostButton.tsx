@@ -1,9 +1,9 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, VStack, FormControl, FormLabel, Input, Text, Textarea, Flex } from "@chakra-ui/react"
-import { useState } from "react";
-import { useMessage } from "./PostMessage";
+import { memo, useState } from "react";
+import { useMessage } from "../../hooks/usetMessage";
 import { SetTime } from "./SetTime";
 
-export const PostButton = () => {
+export const PostButton = memo(() => {
       // Modalに使用する関数
       const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -27,7 +27,6 @@ export const PostButton = () => {
             } else {
                   showMessage( {title: '文字数オーバー', status: 'error'})
             }
-            
       }
 
       return (
@@ -71,4 +70,4 @@ export const PostButton = () => {
                   </Modal>
             </>
       )
-}
+});
