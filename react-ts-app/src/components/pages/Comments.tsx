@@ -9,6 +9,7 @@ import { HeaderLayout } from "../templates/HeaderLayout"
 import { memo } from "react"
 
 export const Comments = memo(() => {
+      const testStrings: string[] = [...Array(50).fill("hoge hoge hoge")]
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -33,7 +34,7 @@ export const Comments = memo(() => {
                                     </BreadcrumbItem>
                               </Breadcrumb>
                               {/* コメント一覧を表示 */}
-                              <CommentList />
+                              <CommentList texts={testStrings} />
                         </VStack>
                   </Flex>
             </HeaderLayout>
