@@ -7,6 +7,8 @@ import { ProgramList } from '../parts/ProgramList'
 import { HeaderLayout } from '../templates/HeaderLayout'
 
 export const Home = () => {
+      // テストデータ
+      const programTitles: string[] = [...Array(50).fill("テスト")];
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -20,9 +22,7 @@ export const Home = () => {
                         {/* 番組一覧を表示 */}
                         <VStack w={{ base: '100%', md: '85%'}}>
                               <Text w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg'>ホーム</Text>
-                              <ProgramList buttonType='programs'>
-                                    バラエティが面白すぎる
-                              </ProgramList>
+                              <ProgramList buttonType='programs' titles={programTitles} />
                         </VStack>
                   </Flex>
             </HeaderLayout>

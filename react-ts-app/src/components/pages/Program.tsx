@@ -8,6 +8,8 @@ import { RangeTime } from "../parts/RangeTime"
 import { HeaderLayout } from "../templates/HeaderLayout"
 
 export const Program = () => {
+      // テストデータ
+      const programNumbers: string[] = [...Array(50).fill("123")]
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -31,9 +33,7 @@ export const Program = () => {
                               </Breadcrumb>
 
                               {/* 放送回を表示 */}
-                              <ProgramList buttonType="comments">
-                                    第135回
-                              </ProgramList>
+                              <ProgramList buttonType="comments" titles={programNumbers}/>
                         </VStack>
                   </Flex>
             </HeaderLayout>
