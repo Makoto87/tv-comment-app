@@ -5,5 +5,13 @@ import (
 )
 
 func main() {
-	gettvinfo.Scraping()
+
+	const url = "https://tver.jp/program"	// スクレイピングするurl
+	const selector = "span.epg-item_seriesTitleText__RnbO0"	// htmlから抜き出す要素
+
+	// htmlを取得する
+	var html string = gettvinfo.Scraping(url, selector)
+
+	// htmlから要素を抜き出す
+	gettvinfo.SaveElements(html, selector)
 }
