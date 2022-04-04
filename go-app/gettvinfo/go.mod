@@ -1,4 +1,4 @@
-module github.com/Makoto87/tv-comment-app/go-app/getTVInformation
+module github.com/Makoto87/tv-comment-app/go-app/gettvinfo
 
 go 1.18
 
@@ -17,5 +17,5 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8 // indirect
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
+	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
 )

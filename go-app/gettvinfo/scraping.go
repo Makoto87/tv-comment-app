@@ -1,4 +1,4 @@
-package getTVInformation
+package gettvinfo
 
 import (
 	"context"
