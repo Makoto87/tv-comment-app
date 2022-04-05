@@ -1,14 +1,41 @@
 package gettvinfo
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 func SaveElements(html string, selector string) {
+
+	// envファイルからpasswordとユーザー名を取得し、data source nameを作成
+	if err := godotenv.Load("go.env"); err != nil {
+		log.Fatalln(err)
+	}
+
+	user := os.Getenv("MYSQL_USER")
+	pw := os.Getenv("MYSQL_PASSWORD")
+	dbName := os.Getenv("DATABASE_NAME")
+	dsn := fmt.Sprintf("%s:%s@(localhost:3306)/%s?charset=utf8", user, pw, dbName)
+
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
+		log.Fatal("OpenError: ", err)
+	}
+	defer db.Close()
+
+	if err := db.Ping(); err != nil {
+		log.Fatal("PingError: ", err)
+	}
+
+	return
+
 	// HTMLをDOMオブジェクトへ変換
 	dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
