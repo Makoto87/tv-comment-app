@@ -6,12 +6,12 @@ import (
 
 func main() {
 
-	const url = "https://tver.jp/program"	// スクレイピングするurl
-	const selector = "span.epg-item_seriesTitleText__RnbO0"	// htmlから抜き出す要素
+	const url = "https://tver.jp/program"                   // スクレイピングするurl
+	const selector = "span.epg-item_seriesTitleText__RnbO0" // htmlから抜き出す要素
 
 	// htmlを取得する
 	var html string = gettvinfo.Scraping(url, selector)
 
-	// htmlから要素を抜き出す
+	// htmlから要素を抜き出し、DBへ保存
 	gettvinfo.SaveElements(html, selector)
 }
