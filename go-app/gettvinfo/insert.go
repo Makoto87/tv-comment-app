@@ -52,8 +52,36 @@ func insert(program string) {
 
 	// insert, 自動採番されるためidは不要
 	const insertProgram = "INSERT INTO programs(program_name, created_at, updated_at) VALUES(?,?,?)"
-	time := time.Now()
+	time := time.Now().Local()
 	_, err := Db.Exec(insertProgram, program, time, time)
+	if err != nil {
+		log.Fatal("InsertError: ", err)
+	}
+}
+
+// episodeを挿入(番組名がある前提)
+func episodeInsert(program string) {
+	// 番組のIDを取得
+	row := Db.QueryRow(`select id from programs where program_name = ?`, program)
+	var id int
+	if err := row.Scan(&id); err != nil {
+		log.Print("rowScanError: ", err)
+		return
+	}
+
+	// すでに同じ日付でepisodeレコードが作成されていないか検索
+	time := time.Now().Local()
+	day := time.Format("2006-01-02")
+	row = Db.QueryRow(`select exists (select * from episodes where date = ? and program_id = ?)`, day, id)
+	var exists bool
+	if err := row.Scan(&exists); err != nil {
+		log.Fatal("rowScanError: ", err)
+	}
+	if exists { return }
+
+	// episodeをinsertする
+	const insertProgram = "INSERT INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES(?,?,?,?,?,?)"
+	_, err := Db.Exec(insertProgram, id, day, nil, nil, time, time)
 	if err != nil {
 		log.Fatal("InsertError: ", err)
 	}
