@@ -1,7 +1,6 @@
 package gettvinfo_test
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -17,7 +16,10 @@ import (
 
 func TestScraping(t *testing.T) {
 	cases := []struct {
-		name, html, inputSelector, want string
+		name          string
+		targetHtml    string
+		inputSelector string
+		want          string
 	}{
 		{"test1", "test1.html", "div1", "test1_result.html"},
 	}
@@ -25,23 +27,27 @@ func TestScraping(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			// test用のhttpサーバーを立ち上げる
-			f := "testdata/" + c.html
+			f := "testdata/" + c.targetHtml
 			template := template.Must(template.ParseFiles(f))
 			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if err := template.ExecuteTemplate(w, c.html, nil); err != nil {
+				if err := template.ExecuteTemplate(w, c.targetHtml, nil); err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 				}
 			}))
 			defer ts.Close()
 			url := ts.URL
-			fmt.Println(url)
 
 			// 希望の出力結果を読み込む
 			rf, err := os.Open("testdata/" + c.want)
 			if err != nil {
 				log.Println(err)
 			}
+			defer rf.Close()
+
 			r, err := html.Parse(rf)
+			if err != nil {
+				log.Println(err)
+			}
 
 			// 立ち上げたサーバーのURLを利用
 			got := gettvinfo.Scraping(url, c.inputSelector)
@@ -49,9 +55,9 @@ func TestScraping(t *testing.T) {
 			if err != nil {
 				log.Println(err)
 			}
-			
-			if reflect.DeepEqual(gh, r) {
-				t.Errorf("Want = %v, \nGot = %v", r, gh)
+
+			if !reflect.DeepEqual(gh, r) {
+				t.Errorf("Want = %#v, \nGot = %#v", r, gh)
 			}
 		})
 	}
