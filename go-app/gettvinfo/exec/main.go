@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Makoto87/tv-comment-app/go-app/gettvinfo"
 )
 
@@ -10,7 +12,11 @@ func main() {
 	const selector = "span.epg-item_seriesTitleText__RnbO0" // htmlから抜き出す要素
 
 	// htmlを取得する
-	var html string = gettvinfo.Scraping(url, selector)
+	html, err := gettvinfo.Scraping(url, selector)
+	if err != nil {
+		log.Println("Failed to get html", err)
+		return
+	}
 
 	// htmlから要素を抜き出し、DBへ保存
 	gettvinfo.SaveElements(html, selector)

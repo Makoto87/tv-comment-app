@@ -19,9 +19,10 @@ func TestScraping(t *testing.T) {
 		name          string
 		targetHtml    string
 		inputSelector string
+		isNormal	bool	// 正常系テストか判断
 		want          string
 	}{
-		{"test1", "test1.html", "div1", "test1_result.html"},
+		{"test1", "test1.html", "div1", true, "test1_result.html"},
 	}
 
 	for _, c := range cases {
@@ -50,7 +51,13 @@ func TestScraping(t *testing.T) {
 			}
 
 			// 立ち上げたサーバーのURLを利用
-			got := gettvinfo.Scraping(url, c.inputSelector)
+			got, err := gettvinfo.Scraping(url, c.inputSelector)
+			if err != nil {
+				if c.isNormal {
+					t.Error("Want to get HTML, but failed ", err)
+				}
+				return
+			}
 			gh, err := html.Parse(strings.NewReader(got))
 			if err != nil {
 				log.Println(err)

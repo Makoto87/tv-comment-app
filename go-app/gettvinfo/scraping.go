@@ -2,13 +2,12 @@ package gettvinfo
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/chromedp/chromedp"
 )
 
-func Scraping(url, selector string) string {
+func Scraping(url, selector string) (string, error) {
 
 	// contextの用意
 	ctx, _ := chromedp.NewContext(context.Background())
@@ -24,8 +23,8 @@ func Scraping(url, selector string) string {
 		// HTMLの取得
 		chromedp.OuterHTML("html", &html, chromedp.ByQuery),
 	); err != nil {
-		log.Fatalln(err)
+		return "", err
 	}
 
-	return html
+	return html, nil
 }
