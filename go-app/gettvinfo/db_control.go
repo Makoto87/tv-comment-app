@@ -39,17 +39,7 @@ func init() {
 }
 
 // 要素を挿入
-func insert(program string) {
-	// 同じ番組名があればINSERTはスキップ
-	row := Db.QueryRow(`select exists (select * from programs where program_name = ?)  `, program)
-	var exists bool
-	if err := row.Scan(&exists); err != nil {
-		log.Fatal("rowScanError: ", err)
-	}
-	if exists == true {
-		return
-	}
-
+func programInsert(program string) {
 	// insert, 自動採番されるためidは不要
 	const insertProgram = "INSERT INTO programs(program_name, created_at, updated_at) VALUES(?,?,?)"
 	time := time.Now().Local()
@@ -57,6 +47,16 @@ func insert(program string) {
 	if err != nil {
 		log.Fatal("InsertError: ", err)
 	}
+}
+
+// programがDBに登録されているか確認
+func isProgram(program string) bool {
+	row := Db.QueryRow(`select exists (select * from programs where program_name = ?)`, program)
+	var exists bool
+	if err := row.Scan(&exists); err != nil {
+		log.Println("Failed to scan exists from programs in isProgram ", err)
+	}
+	return exists
 }
 
 // episodeを挿入(番組名がある前提)
@@ -77,7 +77,9 @@ func episodeInsert(program string) {
 	if err := row.Scan(&exists); err != nil {
 		log.Fatal("rowScanError: ", err)
 	}
-	if exists { return }
+	if exists {
+		return
+	}
 
 	// episodeをinsertする
 	const insertProgram = "INSERT INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES(?,?,?,?,?,?)"

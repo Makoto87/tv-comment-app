@@ -12,7 +12,8 @@ func SaveElements(html string, selector string) {
 	// HTMLをDOMオブジェクトへ変換
 	dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
-		log.Fatalln(err)
+		log.Println("Failed to change HTML to DOM object ", err)
+		return
 	}
 
 	// DOMノードを検索し、空欄以外全て取得
@@ -20,7 +21,10 @@ func SaveElements(html string, selector string) {
 		str := selection.Text()
 		if str != "" {
 			// DBへinsert
-			insert(str)
+			if b := isProgram(str); b {
+				programInsert(str)
+			}
+			episodeInsert(str)
 		}
 	})
 }
