@@ -8,22 +8,24 @@
       <h2>Test2</h2>
       <p class="p1">test2</p>
       <div id="list">
-                  <ul>
-                        <li>test
-                        </li><li>test
-                        </li><li class="js1">test
-                  </li></ul>
-            </div>
-      <script>
-            let list = document.getElementById("list");
-            list.innerHTML = `
-                  <ul>
-                        <li>test
-                        <li>test
-                        <li class="js1">test
-                  </ul>
-            `;
-      </script>
+                        <ul>
+                              <li>test
+                              </li><li>test
+                              </li><li class="js1">test
+                        </li></ul>
+                  </div>
       <footer></footer>
+      <script>
+            window.addEventListener("load", () => {
+                  const list = document.getElementById("list");
+                  list.innerHTML = `
+                        <ul>
+                              <li>test
+                              <li>test
+                              <li class="js1">test
+                        </ul>
+                  `;
+            })
+      </script>
 
 </body></html>

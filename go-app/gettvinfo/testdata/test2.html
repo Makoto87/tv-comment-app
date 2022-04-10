@@ -10,16 +10,18 @@
             <h2>Test2</h2>
             <p class="p1">test2</p>
             <div id="list"></div>
-            <script>
-                  let list = document.getElementById("list");
-                  list.innerHTML = `
-                        <ul>
-                              <li>test
-                              <li>test
-                              <li class="js1">test
-                        </ul>
-                  `;
-            </script>
             <footer></footer>
+            <script>
+                  window.addEventListener("load", () => {
+                        const list = document.getElementById("list");
+                        list.innerHTML = `
+                              <ul>
+                                    <li>test
+                                    <li>test
+                                    <li class="js1">test
+                              </ul>
+                        `;
+                  })
+            </script>
       </body>
 </html>
