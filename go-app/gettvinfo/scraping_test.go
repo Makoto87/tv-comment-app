@@ -19,10 +19,12 @@ func TestScraping(t *testing.T) {
 		name          string
 		targetHtml    string
 		inputSelector string
-		isNormal	bool	// 正常系テストか判断
+		isNormal      bool // 正常系テストか判断
 		want          string
 	}{
 		{"test1", "test1.html", "div1", true, "test1_result.html"},
+		{"test2", "test2.html", "li.js1", true, "test2_result.html"},
+		{"test3", "test1.html", "div3", false, "test1_result.html"},
 	}
 
 	for _, c := range cases {
