@@ -11,7 +11,7 @@ func Scraping(url, selector string) (string, error) {
 
 	// contextの用意
 	ctx, _ := chromedp.NewContext(context.Background())
-	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	// htmlの取得
