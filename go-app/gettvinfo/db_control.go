@@ -14,21 +14,27 @@ import (
 var Db *sql.DB
 var nowFunc func() time.Time
 
-// DBと接続する
 func init() {
-	// envファイルからpasswordとユーザー名を取得し、data source nameを作成
-	err := godotenv.Load("go.env")
-	if err != nil {
-		log.Fatalln(err)
-	}
+	setDb()	// DBの設定
+	setJST()	// JST取得のための設定
+}
 
-	user := os.Getenv("MYSQL_USER")
-	pw := os.Getenv("MYSQL_PASSWORD")
-	dbName := os.Getenv("DATABASE_NAME")
-	dsn := fmt.Sprintf("%s:%s@(localhost:3306)/%s?interpolateParams=true&parseTime=true", user, pw, dbName)
+// DBの初期設定
+func setDb() {
+	// envファイルがあれば読み込む
+	godotenv.Load("go.env")
+
+	// 環境変数からMySqlのuser名・password・DB名を取得し、dataSourceNameを作成
+	user, okUser := os.LookupEnv("MYSQL_USER")
+	pw, okPw := os.LookupEnv("MYSQL_PASSWORD")
+	dn, okDn := os.LookupEnv("DATABASE_NAME")
+	if !okUser || !okPw || !okDn {
+		log.Fatalf("Fataled to get value for DB. user: %v, password: %v, DB name: %v", okUser, okPw, okDn)
+	}
+	dsn := fmt.Sprintf("%s:%s@(localhost:3306)/%s?interpolateParams=true&parseTime=true", user, pw, dn)
 
 	// mysqlと接続
-	Db, err = sql.Open("mysql", dsn)
+	Db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal("OpenError: ", err)
 	}
@@ -37,8 +43,6 @@ func init() {
 	if err := Db.Ping(); err != nil {
 		log.Fatal("PingError: ", err)
 	}
-
-	setJST()
 }
 
 // JSTを取得できる関数を設定
