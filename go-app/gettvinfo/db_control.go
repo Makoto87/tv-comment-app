@@ -12,6 +12,7 @@ import (
 )
 
 var Db *sql.DB
+var nowFunc func() time.Time
 
 // DBと接続する
 func init() {
@@ -36,13 +37,27 @@ func init() {
 	if err := Db.Ping(); err != nil {
 		log.Fatal("PingError: ", err)
 	}
+
+	setJST()
+}
+
+// JSTを取得できる関数を設定
+func setJST() {
+	jst, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		log.Print("can't get Asia/Tokyo: ", err)
+	}
+
+	nowFunc = func() time.Time {
+		return time.Now().In(jst)
+	}
 }
 
 // 要素を挿入
 func programInsert(program string) {
 	// insert, 自動採番されるためidは不要
 	const insertProgram = "INSERT INTO programs(program_name, created_at, updated_at) VALUES(?,?,?)"
-	time := time.Now().Local()
+	time := nowFunc()
 	_, err := Db.Exec(insertProgram, program, time, time)
 	if err != nil {
 		log.Fatal("InsertError: ", err)
@@ -70,7 +85,7 @@ func episodeInsert(program string) {
 	}
 
 	// すでに同じ日付でepisodeレコードが作成されていないか検索
-	time := time.Now().Local()
+	time := nowFunc()
 	day := time.Format("2006-01-02")
 	row = Db.QueryRow(`select exists (select * from episodes where date = ? and program_id = ?)`, day, id)
 	var exists bool
