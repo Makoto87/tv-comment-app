@@ -84,7 +84,6 @@ func episodeInsert(program string) error {
 	row := Db.QueryRow(`select id from programs where program_name = ?`, program)
 	var id int
 	if err := row.Scan(&id); err != nil {
-		log.Print("rowScanError: ", err)
 		return fmt.Errorf(" failed to scan %s id from programs: %w", program, err)
 	}
 

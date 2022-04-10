@@ -24,12 +24,14 @@ func SaveElements(html string, selector string) error {
 			exists, err := isProgram(str)
 			if err != nil {
 				log.Println("Failed isProgram: ",err)
+				return	// エラーの場合は次のselectorへ
 			}
 
 			// program nameがなかったらDBに登録
 			if exists {
 				if err = programInsert(str); err != nil {
 					log.Println("Failed programInsert: ", err)
+					return	// エラーの場合は次のselectorへ
 				}
 			}
 
