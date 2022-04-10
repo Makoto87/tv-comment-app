@@ -19,5 +19,7 @@ func main() {
 	}
 
 	// htmlから要素を抜き出し、DBへ保存
-	gettvinfo.SaveElements(html, selector)
+	if err = gettvinfo.SaveElements(html, selector); err != nil {
+		log.Println(err)
+	}
 }

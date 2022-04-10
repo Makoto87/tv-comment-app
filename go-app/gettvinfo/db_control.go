@@ -15,8 +15,8 @@ var Db *sql.DB
 var nowFunc func() time.Time
 
 func init() {
-	setDb()	// DBの設定
-	setJST()	// JST取得のための設定
+	setDb()  // DBの設定
+	setJST() // JST取得のための設定
 }
 
 // DBの初期設定
@@ -49,7 +49,7 @@ func setDb() {
 func setJST() {
 	jst, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
-		log.Print("can't get Asia/Tokyo: ", err)
+		log.Fatal("can't get Asia/Tokyo: ", err)
 	}
 
 	nowFunc = func() time.Time {
@@ -58,34 +58,34 @@ func setJST() {
 }
 
 // 要素を挿入
-func programInsert(program string) {
+func programInsert(program string) error {
 	// insert, 自動採番されるためidは不要
 	const insertProgram = "INSERT INTO programs(program_name, created_at, updated_at) VALUES(?,?,?)"
 	time := nowFunc()
-	_, err := Db.Exec(insertProgram, program, time, time)
-	if err != nil {
-		log.Fatal("InsertError: ", err)
+	if _, err := Db.Exec(insertProgram, program, time, time); err != nil {
+		return fmt.Errorf(" failed to insert program (%s): %w", program, err)
 	}
+	return nil
 }
 
 // programがDBに登録されているか確認
-func isProgram(program string) bool {
+func isProgram(program string) (bool, error) {
 	row := Db.QueryRow(`select exists (select * from programs where program_name = ?)`, program)
 	var exists bool
 	if err := row.Scan(&exists); err != nil {
-		log.Println("Failed to scan exists from programs in isProgram ", err)
+		return false, fmt.Errorf(" failed to scan %s exists from programs: %w", program, err)
 	}
-	return exists
+	return exists, nil
 }
 
 // episodeを挿入(番組名がある前提)
-func episodeInsert(program string) {
+func episodeInsert(program string) error {
 	// 番組のIDを取得
 	row := Db.QueryRow(`select id from programs where program_name = ?`, program)
 	var id int
 	if err := row.Scan(&id); err != nil {
 		log.Print("rowScanError: ", err)
-		return
+		return fmt.Errorf(" failed to scan %s id from programs: %w", program, err)
 	}
 
 	// すでに同じ日付でepisodeレコードが作成されていないか検索
@@ -94,16 +94,19 @@ func episodeInsert(program string) {
 	row = Db.QueryRow(`select exists (select * from episodes where date = ? and program_id = ?)`, day, id)
 	var exists bool
 	if err := row.Scan(&exists); err != nil {
-		log.Fatal("rowScanError: ", err)
+		return fmt.Errorf(" failed to scan * from episodes where date and program_id in %s, %v: %w", program, day, err)
 	}
 	if exists {
-		return
+		fmt.Printf("Skip to insert episode because episode is exist in %s, %v \n", program, day)
+		return nil
 	}
 
 	// episodeをinsertする
 	const insertProgram = "INSERT INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES(?,?,?,?,?,?)"
 	_, err := Db.Exec(insertProgram, id, day, nil, nil, time, time)
 	if err != nil {
-		log.Fatal("InsertError: ", err)
+		return fmt.Errorf(" failed to insert episode (%s, %v): %w", program, day, err)
 	}
+
+	return nil
 }
