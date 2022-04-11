@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"time"
+	_ "time/tzdata"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
