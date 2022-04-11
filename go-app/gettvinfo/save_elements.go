@@ -28,7 +28,7 @@ func SaveElements(html string, selector string) error {
 			}
 
 			// program nameがなかったらDBに登録
-			if exists {
+			if !exists {
 				if err = programInsert(str); err != nil {
 					log.Println("Failed programInsert: ", err)
 					return	// エラーの場合は次のselectorへ

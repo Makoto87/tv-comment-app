@@ -66,6 +66,7 @@ func programInsert(program string) error {
 	if _, err := Db.Exec(insertProgram, program, time, time); err != nil {
 		return fmt.Errorf(" failed to insert program (%s): %w", program, err)
 	}
+	fmt.Println("program insert success ", program)
 	return nil
 }
 
@@ -107,6 +108,7 @@ func episodeInsert(program string) error {
 	if err != nil {
 		return fmt.Errorf(" failed to insert episode (%s, %v): %w", program, day, err)
 	}
+	fmt.Println("episode insert success ", program)
 
 	return nil
 }
