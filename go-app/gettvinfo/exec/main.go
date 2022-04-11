@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/Makoto87/tv-comment-app/go-app/gettvinfo"
@@ -17,6 +18,7 @@ func main() {
 		log.Println("Failed to get html", err)
 		return
 	}
+	fmt.Println("Success to get html by scraping, ", html)
 
 	// htmlから要素を抜き出し、DBへ保存
 	if err = gettvinfo.SaveElements(html, selector); err != nil {
