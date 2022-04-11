@@ -34,7 +34,8 @@ func setDb() {
 	dsn := fmt.Sprintf("%s:%s@(localhost:3306)/%s?interpolateParams=true&parseTime=true", user, pw, dn)
 
 	// mysqlと接続
-	Db, err := sql.Open("mysql", dsn)
+	var err error
+	Db, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal("OpenError: ", err)
 	}
