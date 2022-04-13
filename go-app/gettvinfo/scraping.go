@@ -6,7 +6,6 @@ import (
 	"github.com/go-rod/rod"
 )
 
-// TV番組専用
 func Scraping(url, selector string) []string {
 
 	// rodを使ってヘッドレスブラウザを立ち上げる
@@ -20,10 +19,13 @@ func Scraping(url, selector string) []string {
 	// MustWaitLoadでページが完全に表示されるまで待つ
 	page.Timeout(20 * time.Second).MustWaitLoad().CancelTimeout()
 
-	// 画面操作
-	page.MustElementR("button", "同意する").MustClick()
-	page.MustElementR("button", "スキップ").MustWaitStable().MustClick()
-	page.MustElement("button.button_button__GOl5m.modal_closeButton__4N3wA").MustWaitStable().MustClick()
+	// 画面操作（TV番組表専用）
+	if url == "https://tver.jp/program" {
+		controllView(page)
+	}
+	// page.MustElementR("button", "同意する").MustClick()
+	// page.MustElementR("button", "スキップ").MustWaitStable().MustClick()
+	// page.MustElement("button.button_button__GOl5m.modal_closeButton__4N3wA").MustWaitStable().MustClick()
 
 	// 要素を取得
 	var programs []string
@@ -36,4 +38,10 @@ func Scraping(url, selector string) []string {
 	}
 
 	return programs
+}
+
+func controllView(page *rod.Page) {
+	page.MustElementR("button", "同意する").MustClick()
+	page.MustElementR("button", "スキップ").MustWaitStable().MustClick()
+	page.MustElement("button.button_button__GOl5m.modal_closeButton__4N3wA").MustWaitStable().MustClick()
 }
