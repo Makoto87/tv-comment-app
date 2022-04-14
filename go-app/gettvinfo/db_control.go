@@ -64,16 +64,6 @@ func ProgramInsert(programs []string) error {
 	return nil
 }
 
-// programがDBに登録されているか確認
-func isProgram(program string) (bool, error) {
-	row := Db.QueryRow(`select exists (select * from programs where program_name = ?)`, program)
-	var exists bool
-	if err := row.Scan(&exists); err != nil {
-		return false, fmt.Errorf(" failed to scan %s exists from programs: %w", program, err)
-	}
-	return exists, nil
-}
-
 // episodeを挿入(番組名がある前提)
 func episodeInsert(program string) error {
 	// 番組のIDを取得
