@@ -5,15 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
-	_ "time/tzdata"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 )
 
 var Db *sql.DB
-var nowFunc func() time.Time
 
 func init() {
 	setDb() // DBの設定
@@ -47,10 +44,9 @@ func setDb() {
 	}
 }
 
-// 要素を挿入
+// 番組を挿入
 func ProgramInsert(programs []string) error {
-	insert := "INSERT IGNORE INTO tests(program_name, created_at, updated_at) VALUES "
-	// insert := "INSERT IGNORE INTO programs(program_name, created_at, updated_at) VALUES "
+	insert := "INSERT IGNORE INTO programs(program_name, created_at, updated_at) VALUES "
 
 	for _, p := range programs {
 		value := fmt.Sprintf(`("%s", NOW(), NOW()),`, p)
@@ -64,35 +60,47 @@ func ProgramInsert(programs []string) error {
 	return nil
 }
 
-// episodeを挿入(番組名がある前提)
-func episodeInsert(program string) error {
-	// 番組のIDを取得
-	row := Db.QueryRow(`select id from programs where program_name = ?`, program)
-	var id int
-	if err := row.Scan(&id); err != nil {
-		return fmt.Errorf(" failed to scan %s id from programs: %w", program, err)
+// episodeを挿入
+func EpisodeInsert(programs []string) error {
+	// sliceを文字列に変換
+	var programStr string
+	for _, p := range programs {
+		programStr += fmt.Sprintf(`"%s",`, p)
 	}
+	programStr = programStr[:len(programStr)-1]
+	fmt.Println(programStr)
 
-	// すでに同じ日付でepisodeレコードが作成されていないか検索
-	time := nowFunc()
-	day := time.Format("2006-01-02")
-	row = Db.QueryRow(`select exists (select * from episodes where date = ? and program_id = ?)`, day, id)
-	var exists bool
-	if err := row.Scan(&exists); err != nil {
-		return fmt.Errorf(" failed to scan * from episodes where date and program_id in %s, %v: %w", program, day, err)
+	// 番組のIDをまとめて取得
+	rows, err := Db.Query(`select id from programs where program_name in (` + programStr + `)`)
+	if err != nil {
+		return fmt.Errorf(" failed to Query id from programs where program_name in args: %w", err)
 	}
-	if exists {
-		fmt.Printf("Skip to insert episode because episode is exist in %s, %v \n", program, day)
-		return nil
+	var ids []int
+	for rows.Next() {
+		var id int
+		if err := rows.Scan(&id); err != nil {
+			return fmt.Errorf(" failed to rows.Scan id from programs: %w", err)
+		}
+		fmt.Println(id)
+		ids = append(ids, id)
+	}
+	if err := rows.Err(); err != nil {
+		return fmt.Errorf(" rows.Err : %w", err)
 	}
 
 	// episodeをinsertする
-	const insertProgram = "INSERT INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES(?,?,?,?,?,?)"
-	_, err := Db.Exec(insertProgram, id, day, nil, nil, time, time)
-	if err != nil {
-		return fmt.Errorf(" failed to insert episode (%s, %v): %w", program, day, err)
-	}
-	fmt.Println("episode insert success ", program)
+	insert := "INSERT IGNORE INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES "
 
+	for _, id := range ids {
+		value := fmt.Sprintf(`(%v, NOW(), null, null, NOW(), NOW()),`, id)
+		insert += value
+	}
+
+	insert = insert[:len(insert)-1]
+	fmt.Println(insert)
+
+	if _, err := Db.Exec(insert); err != nil {
+		return fmt.Errorf(" failed to insert episode: %w", err)
+	}
 	return nil
 }
