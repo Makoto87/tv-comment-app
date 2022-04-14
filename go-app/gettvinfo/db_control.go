@@ -16,8 +16,7 @@ var Db *sql.DB
 var nowFunc func() time.Time
 
 func init() {
-	setDb()  // DBの設定
-	setJST() // JST取得のための設定
+	setDb() // DBの設定
 }
 
 // DBの初期設定
@@ -33,6 +32,7 @@ func setDb() {
 		log.Fatalf("Fataled to get value for DB. user: %v, password: %v, DB name: %v", okUser, okPw, okDn)
 	}
 	dsn := fmt.Sprintf("%s:%s@(localhost:3306)/%s?interpolateParams=true&parseTime=true", user, pw, dn)
+	dsn += "&loc=Asia%2FTokyo"
 
 	// mysqlと接続
 	var err error
@@ -47,27 +47,20 @@ func setDb() {
 	}
 }
 
-// JSTを取得できる関数を設定
-func setJST() {
-	jst, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		log.Fatal("can't get Asia/Tokyo: ", err)
-	}
-
-	nowFunc = func() time.Time {
-		return time.Now().In(jst)
-	}
-}
-
 // 要素を挿入
-func programInsert(program string) error {
-	// insert, 自動採番されるためidは不要
-	const insertProgram = "INSERT INTO programs(program_name, created_at, updated_at) VALUES(?,?,?)"
-	time := nowFunc()
-	if _, err := Db.Exec(insertProgram, program, time, time); err != nil {
-		return fmt.Errorf(" failed to insert program (%s): %w", program, err)
+func ProgramInsert(programs []string) error {
+	insert := "INSERT IGNORE INTO tests(program_name, created_at, updated_at) VALUES "
+	// insert := "INSERT IGNORE INTO programs(program_name, created_at, updated_at) VALUES "
+
+	for _, p := range programs {
+		value := fmt.Sprintf(`("%s", NOW(), NOW()),`, p)
+		insert += value
 	}
-	fmt.Println("program insert success ", program)
+	insert = insert[:len(insert)-1]
+
+	if _, err := Db.Exec(insert); err != nil {
+		return fmt.Errorf(" failed to insert program: %w", err)
+	}
 	return nil
 }
 
