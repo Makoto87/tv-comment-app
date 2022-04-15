@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/Makoto87/tv-comment-app/go-app/gettvinfo"
@@ -9,19 +8,18 @@ import (
 
 func main() {
 
-	const url = "https://tver.jp/program"                   // スクレイピングするurl
-	const selector = "span.epg-item_seriesTitleText__RnbO0" // htmlから抜き出す要素
+	const url = "https://tver.jp/program"               // スクレイピングするurl
+	const selector = ".epg-item_seriesTitleText__RnbO0" // htmlから抜き出す要素
 
-	// htmlを取得する
-	html, err := gettvinfo.Scraping(url, selector)
-	if err != nil {
-		log.Println("Failed to get html", err)
-		return
+	// スクレイピング
+	programs := gettvinfo.Scraping(url, selector)
+
+	// 番組名と放送回をinsert
+	if err := gettvinfo.ProgramInsert(programs); err != nil {
+		log.Println("Fatal: ProgramInsert ", err)
 	}
-	fmt.Println("Success to get html by scraping, ", html)
 
-	// htmlから要素を抜き出し、DBへ保存
-	if err = gettvinfo.SaveElements(html, selector); err != nil {
-		log.Println(err)
+	if err := gettvinfo.EpisodeInsert(programs); err != nil {
+		log.Println("Fatal: EpisodeInsert ", err)
 	}
 }
