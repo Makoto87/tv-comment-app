@@ -23,9 +23,6 @@ func Scraping(url, selector string) []string {
 	if url == "https://tver.jp/program" {
 		controllView(page)
 	}
-	// page.MustElementR("button", "同意する").MustClick()
-	// page.MustElementR("button", "スキップ").MustWaitStable().MustClick()
-	// page.MustElement("button.button_button__GOl5m.modal_closeButton__4N3wA").MustWaitStable().MustClick()
 
 	// 要素を取得
 	var programs []string
