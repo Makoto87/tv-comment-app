@@ -68,7 +68,6 @@ func EpisodeInsert(programs []string) error {
 		programStr += fmt.Sprintf(`"%s",`, p)
 	}
 	programStr = programStr[:len(programStr)-1]
-	fmt.Println(programStr)
 
 	// 番組のIDをまとめて取得
 	rows, err := Db.Query(`select id from programs where program_name in (` + programStr + `)`)
@@ -81,7 +80,6 @@ func EpisodeInsert(programs []string) error {
 		if err := rows.Scan(&id); err != nil {
 			return fmt.Errorf(" failed to rows.Scan id from programs: %w", err)
 		}
-		fmt.Println(id)
 		ids = append(ids, id)
 	}
 	if err := rows.Err(); err != nil {
@@ -97,7 +95,6 @@ func EpisodeInsert(programs []string) error {
 	}
 
 	insert = insert[:len(insert)-1]
-	fmt.Println(insert)
 
 	if _, err := Db.Exec(insert); err != nil {
 		return fmt.Errorf(" failed to insert episode: %w", err)
