@@ -10,6 +10,7 @@
             <h2>Test2</h2>
             <p class="p1">test2</p>
             <div id="list"></div>
+            <div id="div1"></div>
             <footer></footer>
             <script>
                   window.addEventListener("load", () => {
@@ -21,7 +22,31 @@
                                     <li class="js1">test
                               </ul>
                         `;
+
+                        const div = document.getElementById("div1");
+                        div.innerHTML = `
+                              <button id="agree" onclick="agreeClick()">同意する</button>
+                        `;
                   })
+
+                  function agreeClick(){
+                        const div = document.getElementById("div1");
+                        div.innerHTML = `
+                              <button id="skip" onclick="skipClick()">スキップ</button>
+                        `;
+                  }
+
+                  function skipClick(){
+                        const div = document.getElementById("div1");
+                        div.innerHTML = `
+                              <button id="close" class="button_button__GOl5m modal_closeButton__4N3wA" onclick="closeClick()">閉じる</button>
+                        `;
+                  }
+
+                  function closeClick(){
+                        const div = document.getElementById("div1");
+                        div.innerHTML = ``;
+                  }
             </script>
       </body>
 </html>
