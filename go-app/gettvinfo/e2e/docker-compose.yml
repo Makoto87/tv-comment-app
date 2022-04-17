@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  testdb:
+    image: mysql:8.0
+    volumes:
+      - './my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './init_db.sql:/docker-entrypoint-initdb.d/init_db.sql'
+    env_file:
+      - variables.env
+    environment:
+      MYSQL_DATABASE: "test_go_tvapp"
+    ports:
+      - '3306:3306'
