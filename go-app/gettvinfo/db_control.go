@@ -10,36 +10,37 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var Db *sql.DB
+var DB *sql.DB
 
 func init() {
-	setDb() // DBの設定
+	setDB() // DBの設定
 }
 
 // DBの初期設定
-func setDb() {
+func setDB() {
 	// envファイルがあれば読み込む
 	godotenv.Load("go.env")
 
 	// 環境変数からMySqlのuser名・password・DB名を取得し、dataSourceNameを作成
 	user, okUser := os.LookupEnv("MYSQL_USER")
-	pw, okPw := os.LookupEnv("MYSQL_PASSWORD")
-	dn, okDn := os.LookupEnv("DATABASE_NAME")
-	if !okUser || !okPw || !okDn {
-		log.Fatalf("Fataled to get value for DB. user: %v, password: %v, DB name: %v", okUser, okPw, okDn)
+	pw, okPW := os.LookupEnv("MYSQL_PASSWORD")
+	host, okHost := os.LookupEnv("HOST")
+	dn, okDN := os.LookupEnv("DATABASE_NAME")
+	if !okUser || !okPW || !okDN {
+		log.Fatalf("Fataled to get value for DB. user: %v, password: %v, host: %v, DB name: %v", okUser, okPW, okHost, okDN)
 	}
-	dsn := fmt.Sprintf("%s:%s@(localhost:3306)/%s?interpolateParams=true&parseTime=true", user, pw, dn)
+	dsn := fmt.Sprintf("%s:%s@(%s:3306)/%s?interpolateParams=true&parseTime=true", user, pw, host, dn)
 	dsn += "&loc=Asia%2FTokyo"
 
 	// mysqlと接続
 	var err error
-	Db, err = sql.Open("mysql", dsn)
+	DB, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal("OpenError: ", err)
 	}
 
 	// 接続しているか確認
-	if err := Db.Ping(); err != nil {
+	if err := DB.Ping(); err != nil {
 		log.Fatal("PingError: ", err)
 	}
 }
@@ -54,7 +55,7 @@ func ProgramInsert(programs []string) error {
 	}
 	insert = insert[:len(insert)-1]
 
-	if _, err := Db.Exec(insert); err != nil {
+	if _, err := DB.Exec(insert); err != nil {
 		return fmt.Errorf(" failed to insert program: %w", err)
 	}
 	return nil
@@ -70,7 +71,7 @@ func EpisodeInsert(programs []string) error {
 	programStr = programStr[:len(programStr)-1]
 
 	// 番組のIDをまとめて取得
-	rows, err := Db.Query(`select id from programs where program_name in (` + programStr + `)`)
+	rows, err := DB.Query(`select id from programs where program_name in (` + programStr + `)`)
 	if err != nil {
 		return fmt.Errorf(" failed to Query id from programs where program_name in args: %w", err)
 	}
@@ -83,7 +84,7 @@ func EpisodeInsert(programs []string) error {
 		ids = append(ids, id)
 	}
 	if err := rows.Err(); err != nil {
-		return fmt.Errorf(" rows.Err : %w", err)
+		return fmt.Errorf("rows.Err : %w", err)
 	}
 
 	// episodeをinsertする
@@ -96,7 +97,7 @@ func EpisodeInsert(programs []string) error {
 
 	insert = insert[:len(insert)-1]
 
-	if _, err := Db.Exec(insert); err != nil {
+	if _, err := DB.Exec(insert); err != nil {
 		return fmt.Errorf(" failed to insert episode: %w", err)
 	}
 	return nil

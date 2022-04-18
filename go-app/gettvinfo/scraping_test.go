@@ -17,10 +17,10 @@ func TestScraping(t *testing.T) {
 		inputSelector string
 		want          string
 	}{
-		{"test1", "test1.html", ".div1 p", "test1,test1,test1"},
-		{"test2", "test1.html", ".t1", "test1,test1,test1"},
-		{"test3", "test2.html", "li.js1", "test"},
-		{"test4", "test1.html", "div2", ""},
+		{ name: "test1", targetHtml: "test1.html", inputSelector: ".div1 p", want: "test1,test1,test1" },
+		{ name: "test2", targetHtml: "test1.html", inputSelector: ".t1", want: "test1,test1,test1" },
+		{ name: "test3", targetHtml: "test2.html", inputSelector: "li.js1", want: "test" },
+		{ name: "test4", targetHtml: "test1.html", inputSelector: "div2", want: ""},
 	}
 
 	for _, c := range cases {

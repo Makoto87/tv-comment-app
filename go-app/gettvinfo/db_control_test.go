@@ -37,7 +37,7 @@ func TestProgramInsert(t *testing.T) {
 				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 			}
 			defer db.Close()
-			gettvinfo.Db = db
+			gettvinfo.DB = db
 
 			c.mockClosure(mock)
 
@@ -78,7 +78,7 @@ func TestEpisodeInsert(t *testing.T) {
 				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
 			}
 			defer db.Close()
-			gettvinfo.Db = db
+			gettvinfo.DB = db
 
 			c.mockClosure(mock)
 

@@ -8,18 +8,18 @@ import (
 
 func main() {
 
-	const url = "https://tver.jp/program"               // スクレイピングするurl
+	const scrapeURL = "https://tver.jp/program"               // スクレイピングするurl
 	const selector = ".epg-item_seriesTitleText__RnbO0" // htmlから抜き出す要素
 
 	// スクレイピング
-	programs := gettvinfo.Scraping(url, selector)
+	programs := gettvinfo.Scraping(scrapeURL, selector)
 
 	// 番組名と放送回をinsert
 	if err := gettvinfo.ProgramInsert(programs); err != nil {
-		log.Println("Fatal: ProgramInsert ", err)
+		log.Printf("Fatal: ProgramInsert %v", err)
 	}
 
 	if err := gettvinfo.EpisodeInsert(programs); err != nil {
-		log.Println("Fatal: EpisodeInsert ", err)
+		log.Printf("Fatal: EpisodeInsert %v", err)
 	}
 }
