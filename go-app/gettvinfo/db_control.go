@@ -29,8 +29,7 @@ func setDB() {
 	if !okUser || !okPW || !okDN {
 		log.Fatalf("Fataled to get value for DB. user: %v, password: %v, host: %v, DB name: %v", okUser, okPW, okHost, okDN)
 	}
-	dsn := fmt.Sprintf("%s:%s@(%s:3306)/%s?interpolateParams=true&parseTime=true", user, pw, host, dn)
-	dsn += "&loc=Asia%2FTokyo"
+	dsn := fmt.Sprintf("%s:%s@(%s:3306)/%s?interpolateParams=true&parseTime=true&loc=Asia%%2FTokyo", user, pw, host, dn)
 
 	// mysqlと接続
 	var err error
