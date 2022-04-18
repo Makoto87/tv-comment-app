@@ -48,7 +48,7 @@ func setDB() {
 func ProgramInsert(programs []string) error {
 	insert := "INSERT IGNORE INTO programs(program_name, created_at, updated_at) VALUES "
 
-	vals := []interface{}{}
+	vals := make([]any, 0, len(programs))
 	for _, p := range programs {
 		insert += `(?, NOW(), NOW()),`
 		vals = append(vals, p)
@@ -69,7 +69,7 @@ func ProgramInsert(programs []string) error {
 // episodeを挿入
 func EpisodeInsert(programs []string) error {
 	selectID := `select id from programs where program_name in (`
-	vals := []interface{}{}
+	vals := make([]any, 0, len(programs))
 	for _, p := range programs {
 		selectID += `?,`
 		vals = append(vals, p)
@@ -101,7 +101,7 @@ func EpisodeInsert(programs []string) error {
 	// episodeをinsertする
 	insert := "INSERT IGNORE INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES "
 
-	vals = []interface{}{}
+	vals = make([]any, 0, len(ids))
 	for _, id := range ids {
 		insert += `(?, NOW(), null, null, NOW(), NOW()),`
 		vals = append(vals, id)
