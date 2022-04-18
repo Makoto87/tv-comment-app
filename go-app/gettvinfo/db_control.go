@@ -49,13 +49,19 @@ func setDB() {
 func ProgramInsert(programs []string) error {
 	insert := "INSERT IGNORE INTO programs(program_name, created_at, updated_at) VALUES "
 
+	vals := []interface{}{}
 	for _, p := range programs {
-		value := fmt.Sprintf(`("%s", NOW(), NOW()),`, p)
-		insert += value
+		insert += `(?, NOW(), NOW()),`
+		vals = append(vals, p)
 	}
 	insert = insert[:len(insert)-1]
 
-	if _, err := DB.Exec(insert); err != nil {
+	stmt, err := DB.Prepare(insert)
+	if err != nil {
+		return fmt.Errorf(" failed to prepare insert program: %w", err)
+	}
+
+	if _, err := stmt.Exec(vals...); err != nil {
 		return fmt.Errorf(" failed to insert program: %w", err)
 	}
 	return nil
@@ -63,15 +69,21 @@ func ProgramInsert(programs []string) error {
 
 // episodeを挿入
 func EpisodeInsert(programs []string) error {
-	// sliceを文字列に変換
-	var programStr string
+	selectID := `select id from programs where program_name in (`
+	vals := []interface{}{}
 	for _, p := range programs {
-		programStr += fmt.Sprintf(`"%s",`, p)
+		selectID += `?,`
+		vals = append(vals, p)
 	}
-	programStr = programStr[:len(programStr)-1]
+	selectID = selectID[:len(selectID)-1] + `)`
 
 	// 番組のIDをまとめて取得
-	rows, err := DB.Query(`select id from programs where program_name in (` + programStr + `)`)
+	stmt, err := DB.Prepare(selectID)
+	if err != nil {
+		return fmt.Errorf(" failed to prepare select program id: %w", err)
+	}
+
+	rows, err := stmt.Query(vals...)
 	if err != nil {
 		return fmt.Errorf(" failed to Query id from programs where program_name in args: %w", err)
 	}
@@ -90,14 +102,19 @@ func EpisodeInsert(programs []string) error {
 	// episodeをinsertする
 	insert := "INSERT IGNORE INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES "
 
+	vals = []interface{}{}
 	for _, id := range ids {
-		value := fmt.Sprintf(`(%v, NOW(), null, null, NOW(), NOW()),`, id)
-		insert += value
+		insert += `(?, NOW(), null, null, NOW(), NOW()),`
+		vals = append(vals, id)
 	}
-
 	insert = insert[:len(insert)-1]
 
-	if _, err := DB.Exec(insert); err != nil {
+	stmt, err = DB.Prepare(insert)
+	if err != nil {
+		return fmt.Errorf(" failed to prepare insert episode: %w", err)
+	}
+
+	if _, err := stmt.Exec(vals...); err != nil {
 		return fmt.Errorf(" failed to insert episode: %w", err)
 	}
 	return nil
