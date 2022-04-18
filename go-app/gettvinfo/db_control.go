@@ -58,11 +58,11 @@ func ProgramInsert(programs []string) error {
 
 	stmt, err := DB.Prepare(insert)
 	if err != nil {
-		return fmt.Errorf(" failed to prepare insert program: %w", err)
+		return fmt.Errorf("failed to prepare insert program: %w", err)
 	}
 
 	if _, err := stmt.Exec(vals...); err != nil {
-		return fmt.Errorf(" failed to insert program: %w", err)
+		return fmt.Errorf("failed to insert program: %w", err)
 	}
 	return nil
 }
@@ -80,18 +80,18 @@ func EpisodeInsert(programs []string) error {
 	// 番組のIDをまとめて取得
 	stmt, err := DB.Prepare(selectID)
 	if err != nil {
-		return fmt.Errorf(" failed to prepare select program id: %w", err)
+		return fmt.Errorf("failed to prepare select program id: %w", err)
 	}
 
 	rows, err := stmt.Query(vals...)
 	if err != nil {
-		return fmt.Errorf(" failed to Query id from programs where program_name in args: %w", err)
+		return fmt.Errorf("failed to Query id from programs where program_name in args: %w", err)
 	}
 	var ids []int
 	for rows.Next() {
 		var id int
 		if err := rows.Scan(&id); err != nil {
-			return fmt.Errorf(" failed to rows.Scan id from programs: %w", err)
+			return fmt.Errorf("failed rows.Scan id from programs: %w", err)
 		}
 		ids = append(ids, id)
 	}
@@ -111,11 +111,11 @@ func EpisodeInsert(programs []string) error {
 
 	stmt, err = DB.Prepare(insert)
 	if err != nil {
-		return fmt.Errorf(" failed to prepare insert episode: %w", err)
+		return fmt.Errorf("failed to prepare insert episode: %w", err)
 	}
 
 	if _, err := stmt.Exec(vals...); err != nil {
-		return fmt.Errorf(" failed to insert episode: %w", err)
+		return fmt.Errorf("failed to insert episode: %w", err)
 	}
 	return nil
 }

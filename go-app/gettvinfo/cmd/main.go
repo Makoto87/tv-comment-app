@@ -16,10 +16,10 @@ func main() {
 
 	// 番組名と放送回をinsert
 	if err := gettvinfo.ProgramInsert(programs); err != nil {
-		log.Printf("Fatal: ProgramInsert %v", err)
+		log.Printf("Fatal: ProgramInsert: %v", err)
 	}
 
 	if err := gettvinfo.EpisodeInsert(programs); err != nil {
-		log.Printf("Fatal: EpisodeInsert %v", err)
+		log.Printf("Fatal: EpisodeInsert: %v", err)
 	}
 }
