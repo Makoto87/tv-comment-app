@@ -33,7 +33,6 @@ func TestProgramInsert(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			// mock database を用意
 			db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
 			if err != nil {
 				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
@@ -43,12 +42,10 @@ func TestProgramInsert(t *testing.T) {
 
 			c.mockClosure(mock)
 
-			// 関数実行
 			if err = gettvinfo.ProgramInsert(c.input); err != nil {
 				t.Errorf("error was not expected while insert programs: %s", err)
 			}
 
-			// mockと実際の関数を比較
 			if err := mock.ExpectationsWereMet(); err != nil {
 				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
@@ -77,7 +74,6 @@ func TestEpisodeInsert(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			// mock database を用意
 			db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
 			if err != nil {
 				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
@@ -87,12 +83,10 @@ func TestEpisodeInsert(t *testing.T) {
 
 			c.mockClosure(mock)
 
-			// 関数実行
 			if err = gettvinfo.EpisodeInsert(c.input); err != nil {
 				t.Errorf("error was not expected while insert programs: %s", err)
 			}
 
-			// mockと実際の関数を比較
 			if err := mock.ExpectationsWereMet(); err != nil {
 				t.Errorf("there were unfulfilled expectations: %s", err)
 			}

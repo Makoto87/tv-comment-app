@@ -8,13 +8,13 @@ import (
 
 func main() {
 
-	const scrapeURL = "https://tver.jp/program"               // スクレイピングするurl
-	const selector = ".epg-item_seriesTitleText__RnbO0" // htmlから抜き出す要素
+	const scrapeURL = "https://tver.jp/program"
+	const selector = ".epg-item_seriesTitleText__RnbO0"
 
-	// スクレイピング
 	programs := gettvinfo.Scraping(scrapeURL, selector)
 
-	// 番組名と放送回をinsert
+	// TODO(makoto): function to get information of episode number and title
+
 	if err := gettvinfo.ProgramInsert(programs); err != nil {
 		log.Printf("Fatal: ProgramInsert: %v", err)
 	}

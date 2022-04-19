@@ -25,7 +25,6 @@ func TestScraping(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			// test用のhttpサーバーを立ち上げる
 			f := "testdata/" + c.targetHtml
 			template := template.Must(template.ParseFiles(f))
 			ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +35,6 @@ func TestScraping(t *testing.T) {
 			defer ts.Close()
 			url := ts.URL
 
-			// 立ち上げたサーバーのURLを利用
 			got := gettvinfo.Scraping(url, c.inputSelector)
 			gotStrs := strings.Join(got, ",")
 

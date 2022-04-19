@@ -1,3 +1,4 @@
+// get tv program information by scraping, and insert information into database
 package gettvinfo
 
 import (
@@ -13,15 +14,13 @@ import (
 var DB *sql.DB
 
 func init() {
-	setDB() // DBの設定
+	setDB()
 }
 
-// DBの初期設定
+// set up to connect database
 func setDB() {
-	// envファイルがあれば読み込む
 	godotenv.Load("go.env")
 
-	// 環境変数からMySqlのuser名・password・DB名を取得し、dataSourceNameを作成
 	user, okUser := os.LookupEnv("MYSQL_USER")
 	pw, okPW := os.LookupEnv("MYSQL_PASSWORD")
 	host, okHost := os.LookupEnv("HOST")
@@ -31,20 +30,18 @@ func setDB() {
 	}
 	dsn := fmt.Sprintf("%s:%s@(%s:3306)/%s?interpolateParams=true&parseTime=true&loc=Asia%%2FTokyo", user, pw, host, dn)
 
-	// mysqlと接続
 	var err error
 	DB, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal("OpenError: ", err)
 	}
 
-	// 接続しているか確認
 	if err := DB.Ping(); err != nil {
 		log.Fatal("PingError: ", err)
 	}
 }
 
-// 番組を挿入
+// insert program into database. any number is acceptable.
 func ProgramInsert(programs []string) error {
 	insert := "INSERT IGNORE INTO programs(program_name, created_at, updated_at) VALUES "
 
@@ -66,7 +63,7 @@ func ProgramInsert(programs []string) error {
 	return nil
 }
 
-// episodeを挿入
+// insert episodes into database. First, get all id from programs. Second, insert episodes which use id from programs.
 func EpisodeInsert(programs []string) error {
 	selectID := `select id from programs where program_name in (`
 	vals := make([]any, 0, len(programs))
@@ -76,7 +73,6 @@ func EpisodeInsert(programs []string) error {
 	}
 	selectID = selectID[:len(selectID)-1] + `)`
 
-	// 番組のIDをまとめて取得
 	stmt, err := DB.Prepare(selectID)
 	if err != nil {
 		return fmt.Errorf("failed to prepare select program id: %w", err)
@@ -98,7 +94,6 @@ func EpisodeInsert(programs []string) error {
 		return fmt.Errorf("rows.Err : %w", err)
 	}
 
-	// episodeをinsertする
 	insert := "INSERT IGNORE INTO episodes(program_id, date, episode_number, episode_title, created_at, updated_at) VALUES "
 
 	vals = make([]any, 0, len(ids))
