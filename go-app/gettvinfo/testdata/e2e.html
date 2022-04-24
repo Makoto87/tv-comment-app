@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>E2E</title>
+</head>
+<body>
+      <h1>E2Etest</h1>
+      <p class="epg-item_seriesTitleText__RnbO0">paragraph</p>
+      <div>
+            <p class="t1 epg-item_seriesTitleText__RnbO0">test1</p>
+            <p>test2</p>
+            <p class="epg-item_seriesTitleText__RnbO0">test3</p>
+      </div>
+      <div>
+            <p class="t2">test4</p>
+            <p class="epg-item_seriesTitleText__RnbO0">test5</p>
+            <p>test6</p>
+      </div>
+      <div>
+            <p>test7</p>
+            <div>
+                  <p class="epg-item_seriesTitleText__RnbO0">test8</p>
+            </div>
+      </div>
+      <div id="div1"></div>
+
+      <script>
+            window.addEventListener("load", () => {
+                  const div = document.getElementById("div1");
+                  div.innerHTML = `
+                        <button id="agree" onclick="agreeClick()">同意する</button>
+                  `;
+            })
+
+            function agreeClick(){
+                  const div = document.getElementById("div1");
+                  div.innerHTML = `
+                        <button id="skip" onclick="skipClick()">スキップ</button>
+                  `;
+            }
+
+            function skipClick(){
+                  const div = document.getElementById("div1");
+                  div.innerHTML = `
+                        <button id="close" class="button_button__GOl5m modal_closeButton__4N3wA" onclick="closeClick()">閉じる</button>
+                  `;
+            }
+
+            function closeClick(){
+                  const div = document.getElementById("div1");
+                  div.innerHTML = ``;
+            }
+      </script>
+</body>
+</html>
