@@ -21,11 +21,13 @@ func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, er
 
 func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.Program, error) {
 	var programs []*model.Program
-	dummyLink := model.Program{
-		ID:   1,
-		Name: "test_name",
+	var err error
+
+	programs, err = model.GetPrograms(search)
+	if err != nil {
+		return nil, fmt.Errorf("Programs of queryResolver %w", err)
 	}
-	programs = append(programs, &dummyLink)
+	
 	return programs, nil
 }
 
