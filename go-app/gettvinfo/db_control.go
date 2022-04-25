@@ -25,7 +25,7 @@ func setDB() {
 	pw, okPW := os.LookupEnv("MYSQL_PASSWORD")
 	host, okHost := os.LookupEnv("HOST")
 	dn, okDN := os.LookupEnv("DATABASE_NAME")
-	if !okUser || !okPW || !okDN {
+	if !okUser || !okPW || !okHost || !okDN {
 		log.Fatalf("Fataled to get value for DB. user: %v, password: %v, host: %v, DB name: %v", okUser, okPW, okHost, okDN)
 	}
 	dsn := fmt.Sprintf("%s:%s@(%s:3306)/%s?interpolateParams=true&parseTime=true&loc=Asia%%2FTokyo", user, pw, host, dn)
