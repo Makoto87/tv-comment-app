@@ -11,11 +11,29 @@ import (
 	"github.com/Makoto87/tv-comment-app/go-app/server/graph/model"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (*model.Comment, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.Program, error) {
+	var programs []*model.Program
+	dummyLink := model.Program{
+		ID:   1,
+		Name: "test_name",
+	}
+	programs = append(programs, &dummyLink)
+	return programs, nil
+}
+
+func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesInput) ([]*model.Episode, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.Comment, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

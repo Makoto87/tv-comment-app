@@ -2,19 +2,37 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Comment struct {
+	ID       int    `json:"id"`
+	Comment  string `json:"comment"`
+	Likes    int    `json:"likes"`
+	User     *User  `json:"user"`
+	PostDate string `json:"postDate"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type Episode struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type NewComment struct {
+	EpisodeID int    `json:"episodeID"`
+	Comment   string `json:"comment"`
+	Username  string `json:"username"`
+}
+
+type Program struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type QueryEpisodesInput struct {
+	ProgramID int `json:"programID"`
+	From      int `json:"from"`
+	To        int `json:"to"`
 }
 
 type User struct {
-	ID   string `json:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
