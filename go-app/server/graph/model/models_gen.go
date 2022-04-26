@@ -11,8 +11,8 @@ type Comment struct {
 }
 
 type Episode struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID   int `json:"id"`
+	Date int `json:"date"`
 }
 
 type NewComment struct {
@@ -28,8 +28,8 @@ type Program struct {
 
 type QueryEpisodesInput struct {
 	ProgramID int `json:"programID"`
-	From      int `json:"from"`
-	To        int `json:"to"`
+	FromDate  int `json:"fromDate"`
+	ToDate    int `json:"toDate"`
 }
 
 type User struct {

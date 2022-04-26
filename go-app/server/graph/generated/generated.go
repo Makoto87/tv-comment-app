@@ -53,8 +53,8 @@ type ComplexityRoot struct {
 	}
 
 	Episode struct {
+		Date func(childComplexity int) int
 		ID   func(childComplexity int) int
-		Name func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -139,19 +139,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Comment.User(childComplexity), true
 
+	case "Episode.date":
+		if e.complexity.Episode.Date == nil {
+			break
+		}
+
+		return e.complexity.Episode.Date(childComplexity), true
+
 	case "Episode.id":
 		if e.complexity.Episode.ID == nil {
 			break
 		}
 
 		return e.complexity.Episode.ID(childComplexity), true
-
-	case "Episode.name":
-		if e.complexity.Episode.Name == nil {
-			break
-		}
-
-		return e.complexity.Episode.Name(childComplexity), true
 
 	case "Mutation.createComment":
 		if e.complexity.Mutation.CreateComment == nil {
@@ -312,7 +312,7 @@ var sources = []*ast.Source{
 
 type Episode {
       id: Int!
-      name: String!
+      date: Int!
 }
 
 type Comment {
@@ -330,8 +330,8 @@ type User {
 
 input QueryEpisodesInput {
     programID: Int!
-    from: Int! = 0
-    to: Int! = 99999999
+    fromDate: Int! = 0
+    toDate: Int! = 99999999
 }
 
 type Query {
@@ -756,8 +756,8 @@ func (ec *executionContext) fieldContext_Episode_id(ctx context.Context, field g
 	return fc, nil
 }
 
-func (ec *executionContext) _Episode_name(ctx context.Context, field graphql.CollectedField, obj *model.Episode) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Episode_name(ctx, field)
+func (ec *executionContext) _Episode_date(ctx context.Context, field graphql.CollectedField, obj *model.Episode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Episode_date(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -770,7 +770,7 @@ func (ec *executionContext) _Episode_name(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
+		return obj.Date, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -782,19 +782,19 @@ func (ec *executionContext) _Episode_name(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Episode_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Episode_date(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Episode",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1112,8 +1112,8 @@ func (ec *executionContext) fieldContext_Query_episodes(ctx context.Context, fie
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Episode_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Episode_name(ctx, field)
+			case "date":
+				return ec.fieldContext_Episode_date(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Episode", field.Name)
 		},
@@ -3235,11 +3235,11 @@ func (ec *executionContext) unmarshalInputQueryEpisodesInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	if _, present := asMap["from"]; !present {
-		asMap["from"] = 0
+	if _, present := asMap["fromDate"]; !present {
+		asMap["fromDate"] = 0
 	}
-	if _, present := asMap["to"]; !present {
-		asMap["to"] = 99999999
+	if _, present := asMap["toDate"]; !present {
+		asMap["toDate"] = 99999999
 	}
 
 	for k, v := range asMap {
@@ -3252,19 +3252,19 @@ func (ec *executionContext) unmarshalInputQueryEpisodesInput(ctx context.Context
 			if err != nil {
 				return it, err
 			}
-		case "from":
+		case "fromDate":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("from"))
-			it.From, err = ec.unmarshalNInt2int(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fromDate"))
+			it.FromDate, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "to":
+		case "toDate":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("to"))
-			it.To, err = ec.unmarshalNInt2int(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("toDate"))
+			it.ToDate, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3373,9 +3373,9 @@ func (ec *executionContext) _Episode(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "name":
+		case "date":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Episode_name(ctx, field, obj)
+				return ec._Episode_date(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)

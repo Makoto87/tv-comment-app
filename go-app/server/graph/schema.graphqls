@@ -5,7 +5,7 @@ type Program {
 
 type Episode {
       id: Int!
-      name: String!
+      date: Int!
 }
 
 type Comment {
@@ -23,8 +23,8 @@ type User {
 
 input QueryEpisodesInput {
     programID: Int!
-    from: Int! = 0
-    to: Int! = 99999999
+    fromDate: Int! = 0
+    toDate: Int! = 99999999
 }
 
 type Query {
