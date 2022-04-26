@@ -6,10 +6,12 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/Makoto87/tv-comment-app/go-app/server/dbcontrol"
 	"github.com/Makoto87/tv-comment-app/go-app/server/graph/generated"
 	"github.com/Makoto87/tv-comment-app/go-app/server/graph/model"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (*model.Comment, error) {
@@ -25,7 +27,8 @@ func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.P
 
 	dbPrograms, err := dbcontrol.GetPrograms(search)
 	if err != nil {
-		return nil, fmt.Errorf("Programs of queryResolver %w", err)
+		log.Printf("Programs of queryResolver %v", err)
+		return nil, gqlerror.Errorf("server error")
 	}
 
 	for _, p := range dbPrograms {
@@ -40,7 +43,8 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 
 	dbEpisodes, err := dbcontrol.GetEpisodes(input.ProgramID, input.FromDate, input.ToDate)
 	if err != nil {
-		return nil, fmt.Errorf("Episodes of queryResolver %w", err)
+		log.Printf("Episodes of queryResolver %v", err)
+		return nil, gqlerror.Errorf("server error")
 	}
 
 	for _, e := range dbEpisodes {
