@@ -36,7 +36,18 @@ func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.P
 }
 
 func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesInput) ([]*model.Episode, error) {
-	panic(fmt.Errorf("not implemented"))
+	var episodes []*model.Episode
+
+	dbEpisodes, err := dbcontrol.GetEpisodes(input.ProgramID, input.FromDate, input.ToDate)
+	if err != nil {
+		return nil, fmt.Errorf("Episodes of queryResolver %w", err)
+	}
+
+	for _, e := range dbEpisodes {
+		episodes = append(episodes, &model.Episode{ID: e.ID, Date: e.Date})
+	}
+
+	return episodes, nil
 }
 
 func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.Comment, error) {
