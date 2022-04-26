@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Makoto87/tv-comment-app/go-app/server/dbcontrol"
 	"github.com/Makoto87/tv-comment-app/go-app/server/graph/generated"
 	"github.com/Makoto87/tv-comment-app/go-app/server/graph/model"
 )
@@ -21,13 +22,16 @@ func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, er
 
 func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.Program, error) {
 	var programs []*model.Program
-	var err error
 
-	programs, err = model.GetPrograms(search)
+	dbPrograms, err := dbcontrol.GetPrograms(search)
 	if err != nil {
 		return nil, fmt.Errorf("Programs of queryResolver %w", err)
 	}
-	
+
+	for _, p := range dbPrograms {
+		programs = append(programs, &model.Program{ID: p.ID, Name: p.Name})
+	}
+
 	return programs, nil
 }
 
