@@ -5,7 +5,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/Makoto87/tv-comment-app/go-app/server/dbcontrol"
@@ -24,7 +23,11 @@ func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewCom
 }
 
 func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, error) {
-	panic(fmt.Errorf("not implemented"))
+	likes, err := dbcontrol.UpdateCommentLikes(commentID)
+	if err != nil {
+		return likes, gqlerror.Errorf("server error")
+	}
+	return likes, nil
 }
 
 func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.Program, error) {

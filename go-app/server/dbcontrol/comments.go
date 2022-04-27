@@ -61,5 +61,34 @@ func CreateComment(episodeID, userID int, comment string) error {
 		return fmt.Errorf("failed to insert comment into comments %w", err)
 	}
 
-	return nil	
+	return nil
+}
+
+func UpdateCommentLikes(commentID int) (int, error) {
+	query := "update comments set likes = likes + 1 where id = ?"
+
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return -1, fmt.Errorf("failed to prepare update: %w", err)
+	}
+
+	_, err = stmt.Exec(commentID)
+	if err != nil {
+		return -1, fmt.Errorf("failed to update likes from comments: %w", err)
+	}
+
+	query = "select likes from comments where id = ?"
+
+	stmt, err = db.Prepare(query)
+	if err != nil {
+		return -1, fmt.Errorf("failed to prepare select: %w", err)
+	}
+
+	var likes int
+	err = stmt.QueryRow(commentID).Scan(&likes)
+	if err != nil {
+		return -1, fmt.Errorf("failed to select likes from comments: %w", err)
+	}
+
+	return likes, nil
 }
