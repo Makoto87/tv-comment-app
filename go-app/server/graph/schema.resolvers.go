@@ -14,7 +14,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
-func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (*model.Comment, error) {
+func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

@@ -80,7 +80,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateComment(ctx context.Context, input model.NewComment) (*model.Comment, error)
+	CreateComment(ctx context.Context, input model.NewComment) (string, error)
 	PushLike(ctx context.Context, commentID int) (int, error)
 }
 type QueryResolver interface {
@@ -343,11 +343,11 @@ type Query {
 input NewComment {
       episodeID: Int!
       comment: String!
-      username: String!
+      userID: Int!
 }
 
 type Mutation {
-      createComment(input: NewComment!): Comment!
+      createComment(input: NewComment!): String!
       pushLike(commentID: Int!): Int!
 }
 `, BuiltIn: false},
@@ -826,9 +826,9 @@ func (ec *executionContext) _Mutation_createComment(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Comment)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNComment2ᚖgithubᚗcomᚋMakoto87ᚋtvᚑcommentᚑappᚋgoᚑappᚋserverᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createComment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -838,19 +838,7 @@ func (ec *executionContext) fieldContext_Mutation_createComment(ctx context.Cont
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Comment_id(ctx, field)
-			case "comment":
-				return ec.fieldContext_Comment_comment(ctx, field)
-			case "likes":
-				return ec.fieldContext_Comment_likes(ctx, field)
-			case "user":
-				return ec.fieldContext_Comment_user(ctx, field)
-			case "postDate":
-				return ec.fieldContext_Comment_postDate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Comment", field.Name)
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	defer func() {
@@ -3214,11 +3202,11 @@ func (ec *executionContext) unmarshalInputNewComment(ctx context.Context, obj in
 			if err != nil {
 				return it, err
 			}
-		case "username":
+		case "userID":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
-			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userID"))
+			it.UserID, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4075,10 +4063,6 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalNComment2githubᚗcomᚋMakoto87ᚋtvᚑcommentᚑappᚋgoᚑappᚋserverᚋgraphᚋmodelᚐComment(ctx context.Context, sel ast.SelectionSet, v model.Comment) graphql.Marshaler {
-	return ec._Comment(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNComment2ᚕᚖgithubᚗcomᚋMakoto87ᚋtvᚑcommentᚑappᚋgoᚑappᚋserverᚋgraphᚋmodelᚐCommentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Comment) graphql.Marshaler {

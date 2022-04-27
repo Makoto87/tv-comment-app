@@ -18,7 +18,7 @@ type Episode struct {
 type NewComment struct {
 	EpisodeID int    `json:"episodeID"`
 	Comment   string `json:"comment"`
-	Username  string `json:"username"`
+	UserID    int    `json:"userID"`
 }
 
 type Program struct {

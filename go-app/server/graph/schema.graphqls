@@ -36,10 +36,10 @@ type Query {
 input NewComment {
       episodeID: Int!
       comment: String!
-      username: String!
+      userID: Int!
 }
 
 type Mutation {
-      createComment(input: NewComment!): Comment!
+      createComment(input: NewComment!): String!
       pushLike(commentID: Int!): Int!
 }
