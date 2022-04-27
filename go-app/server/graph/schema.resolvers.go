@@ -55,7 +55,19 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 }
 
 func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.Comment, error) {
-	panic(fmt.Errorf("not implemented"))
+	var comments []*model.Comment
+	dbComments, err := dbcontrol.GetComments(episodeID)
+	if err != nil {
+		log.Printf("Episodes of queryResolver %v", err)
+		return nil, gqlerror.Errorf("server error")
+	}
+
+	for _, c := range dbComments {
+		u := model.User{ID: c.User.ID, Name: c.User.Name}
+		comments = append(comments, &model.Comment{ID: c.ID, Comment: c.Comment, Likes: c.Likes, User: &u, PostDate: c.PostDate})
+	}
+
+	return comments, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
