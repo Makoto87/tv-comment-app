@@ -46,3 +46,20 @@ func GetComments(episodeID int) ([]Comment, error) {
 
 	return comments, nil
 }
+
+// this insert comment into comments. episodeID is primary key, userID is foreign key of users
+func CreateComment(episodeID, userID int, comment string) error {
+	query := "insert into comments values(null, ?, ?, ?, now(), 0, now(), now())"
+
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return fmt.Errorf("failed to prepare insert comment: %w", err)
+	}
+
+	_, err = stmt.Exec(comment, episodeID, userID)
+	if err != nil {
+		return fmt.Errorf("failed to insert comment into comments %w", err)
+	}
+
+	return nil	
+}

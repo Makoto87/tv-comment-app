@@ -15,7 +15,12 @@ import (
 )
 
 func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+	err := dbcontrol.CreateComment(input.EpisodeID, input.UserID, input.Comment)
+	if err != nil {
+		log.Printf("Create Comment %v", err)
+		return "", gqlerror.Errorf("server error")
+	}
+	return "Success to create comment", nil
 }
 
 func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, error) {
