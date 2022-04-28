@@ -64,6 +64,7 @@ func CreateComment(episodeID, userID int, comment string) error {
 	return nil
 }
 
+// this add 1 to likes of comment which has commentID
 func UpdateCommentLikes(commentID int) (int, error) {
 	query := "update comments set likes = likes + 1 where id = ?"
 
