@@ -23,11 +23,13 @@ func GetComments(episodeID int) ([]Comment, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select from comments: %w", err)
 	}
+	defer stmt.Close()
 
 	rows, err := stmt.Query(episodeID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to select comment by Query: %w", err)
 	}
+	defer rows.Close()
 
 	var comments []Comment
 	for rows.Next() {
@@ -55,6 +57,7 @@ func CreateComment(episodeID, userID int, comment string) error {
 	if err != nil {
 		return fmt.Errorf("failed to prepare insert comment: %w", err)
 	}
+	defer stmt.Close()
 
 	_, err = stmt.Exec(comment, episodeID, userID)
 	if err != nil {
@@ -77,6 +80,7 @@ func UpdateCommentLikes(commentID int) (int, error) {
 	if err != nil {
 		return -1, fmt.Errorf("failed to update likes from comments: %w", err)
 	}
+	stmt.Close()
 
 	query = "select likes from comments where id = ?"
 
@@ -84,6 +88,7 @@ func UpdateCommentLikes(commentID int) (int, error) {
 	if err != nil {
 		return -1, fmt.Errorf("failed to prepare select: %w", err)
 	}
+	defer stmt.Close()
 
 	var likes int
 	err = stmt.QueryRow(commentID).Scan(&likes)

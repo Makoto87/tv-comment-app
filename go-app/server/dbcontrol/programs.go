@@ -18,11 +18,13 @@ func GetPrograms(search string) ([]Program, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select id & program_name: %w", err)
 	}
+	defer stmt.Close()
 
 	rows, err := stmt.Query(search)
 	if err != nil {
 		return nil, fmt.Errorf("failed to select program id, program_name by Query: %w", err)
 	}
+	defer rows.Close()
 
 	var programs []Program
 	for rows.Next() {

@@ -17,11 +17,13 @@ func GetEpisodes(programID, fromDate, toDate int) ([]Episode, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select id, date from episodes: %w", err)
 	}
+	defer stmt.Close()
 
 	rows, err := stmt.Query(programID, fromDate, toDate)
 	if err != nil {
 		return nil, fmt.Errorf("failed to select episode id, date by Query: %w", err)
 	}
+	defer rows.Close()
 
 	var episodes []Episode
 	for rows.Next() {
