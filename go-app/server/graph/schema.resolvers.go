@@ -31,7 +31,6 @@ func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, er
 }
 
 func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.Program, error) {
-	var programs []*model.Program
 
 	dbPrograms, err := dbcontrol.GetPrograms(search)
 	if err != nil {
@@ -39,6 +38,7 @@ func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.P
 		return nil, gqlerror.Errorf("server error")
 	}
 
+	programs := make([]*model.Program, 0, len(dbPrograms))
 	for _, p := range dbPrograms {
 		programs = append(programs, &model.Program{ID: p.ID, Name: p.Name})
 	}
@@ -47,7 +47,6 @@ func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.P
 }
 
 func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesInput) ([]*model.Episode, error) {
-	var episodes []*model.Episode
 
 	dbEpisodes, err := dbcontrol.GetEpisodes(input.ProgramID, input.FromDate, input.ToDate)
 	if err != nil {
@@ -55,6 +54,7 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 		return nil, gqlerror.Errorf("server error")
 	}
 
+	episodes := make([]*model.Episode, 0, len(dbEpisodes))
 	for _, e := range dbEpisodes {
 		episodes = append(episodes, &model.Episode{ID: e.ID, Date: e.Date})
 	}
@@ -63,13 +63,14 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 }
 
 func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.Comment, error) {
-	var comments []*model.Comment
+	
 	dbComments, err := dbcontrol.GetComments(episodeID)
 	if err != nil {
 		log.Printf("Episodes of queryResolver %v", err)
 		return nil, gqlerror.Errorf("server error")
 	}
 
+	comments := make([]*model.Comment, 0, len(dbComments))
 	for _, c := range dbComments {
 		u := model.User{ID: c.User.ID, Name: c.User.Name}
 		comments = append(comments, &model.Comment{ID: c.ID, Comment: c.Comment, Likes: c.Likes, User: &u, PostDate: c.PostDate})
