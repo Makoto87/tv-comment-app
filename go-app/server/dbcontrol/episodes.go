@@ -13,7 +13,7 @@ type Episode struct {
 func GetEpisodes(programID, fromDate, toDate int) ([]Episode, error) {
 	query := "select id, cast(date as unsigned) from episodes where program_id = ? and date between ? and ? order by date desc"
 
-	stmt, err := db.Prepare(query)
+	stmt, err := DB.Prepare(query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select id, date from episodes: %w", err)
 	}

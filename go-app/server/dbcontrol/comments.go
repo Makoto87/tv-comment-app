@@ -19,7 +19,7 @@ type User struct {
 func GetComments(episodeID int) ([]Comment, error) {
 	query := "select comments.id, comments.comment, comments.likes, cast(comments.post_date as unsigned), users.id, users.user_name from comments inner join users on comments.user_id = users.id where episode_id = ?"
 
-	stmt, err := db.Prepare(query)
+	stmt, err := DB.Prepare(query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select from comments: %w", err)
 	}
@@ -51,7 +51,7 @@ func GetComments(episodeID int) ([]Comment, error) {
 func CreateComment(episodeID, userID int, comment string) error {
 	query := "insert into comments values(null, ?, ?, ?, now(), 0, now(), now())"
 
-	stmt, err := db.Prepare(query)
+	stmt, err := DB.Prepare(query)
 	if err != nil {
 		return fmt.Errorf("failed to prepare insert comment: %w", err)
 	}
@@ -68,7 +68,7 @@ func CreateComment(episodeID, userID int, comment string) error {
 func UpdateCommentLikes(commentID int) (int, error) {
 	query := "update comments set likes = likes + 1 where id = ?"
 
-	stmt, err := db.Prepare(query)
+	stmt, err := DB.Prepare(query)
 	if err != nil {
 		return -1, fmt.Errorf("failed to prepare update: %w", err)
 	}
@@ -80,7 +80,7 @@ func UpdateCommentLikes(commentID int) (int, error) {
 
 	query = "select likes from comments where id = ?"
 
-	stmt, err = db.Prepare(query)
+	stmt, err = DB.Prepare(query)
 	if err != nil {
 		return -1, fmt.Errorf("failed to prepare select: %w", err)
 	}

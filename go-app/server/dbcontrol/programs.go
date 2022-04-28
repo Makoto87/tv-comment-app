@@ -14,7 +14,7 @@ func GetPrograms(search string) ([]Program, error) {
 		search = "%"
 	}
 
-	stmt, err := db.Prepare(query)
+	stmt, err := DB.Prepare(query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select id & program_name: %w", err)
 	}

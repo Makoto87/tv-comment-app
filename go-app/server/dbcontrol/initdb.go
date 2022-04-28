@@ -10,7 +10,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var db *sql.DB
+var DB *sql.DB
 
 // set up db connection
 func init() {
@@ -26,12 +26,12 @@ func init() {
 	dsn := fmt.Sprintf("%s:%s@(%s:3306)/%s?interpolateParams=true&parseTime=true&loc=Asia%%2FTokyo", user, pw, host, dn)
 
 	var err error
-	db, err = sql.Open("mysql", dsn)
+	DB, err = sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal("[server/graph/model] OpenError: ", err)
 	}
 
-	if err := db.Ping(); err != nil {
+	if err := DB.Ping(); err != nil {
 		log.Fatal("[server/graph/model] PingError: ", err)
 	}
 }
