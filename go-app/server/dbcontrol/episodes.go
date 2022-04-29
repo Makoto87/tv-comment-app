@@ -16,13 +16,13 @@ func GetEpisodes(ctx context.Context, programID, fromDate, toDate int) ([]Episod
 
 	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
-		return nil, fmt.Errorf("failed to prepare select id, date from episodes: %w", err)
+		return nil, fmt.Errorf("failed PrepareContext: %w", err)
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.QueryContext(ctx, programID, fromDate, toDate)
 	if err != nil {
-		return nil, fmt.Errorf("failed to select episode id, date by Query: %w", err)
+		return nil, fmt.Errorf("failed QueryContext: %w", err)
 	}
 	defer rows.Close()
 
@@ -30,7 +30,7 @@ func GetEpisodes(ctx context.Context, programID, fromDate, toDate int) ([]Episod
 	for rows.Next() {
 		var e Episode
 		if err := rows.Scan(&e.ID, &e.Date); err != nil {
-			return nil, fmt.Errorf("failed rows.Scan id, date from episodes: %w", err)
+			return nil, fmt.Errorf("failed rows.Scan: %w", err)
 		}
 		episodes = append(episodes, e)
 	}

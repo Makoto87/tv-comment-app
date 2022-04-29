@@ -24,13 +24,13 @@ func GetComments(ctx context.Context, episodeID int) ([]Comment, error) {
 
 	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
-		return nil, fmt.Errorf("failed to prepare select from comments: %w", err)
+		return nil, fmt.Errorf("failed PrepareContext: %w", err)
 	}
 	defer stmt.Close()
 
 	rows, err := stmt.QueryContext(ctx, episodeID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to select comment by Query: %w", err)
+		return nil, fmt.Errorf("failed QueryContext: %w", err)
 	}
 	defer rows.Close()
 
@@ -39,7 +39,7 @@ func GetComments(ctx context.Context, episodeID int) ([]Comment, error) {
 		var c Comment
 		var u User
 		if err := rows.Scan(&c.ID, &c.Comment, &c.Likes, &c.PostDate, &u.ID, &u.Name); err != nil {
-			return nil, fmt.Errorf("failed rows.Scan from comments: %w", err)
+			return nil, fmt.Errorf("failed rows.Scan: %w", err)
 		}
 		c.User = &u
 		comments = append(comments, c)
@@ -58,13 +58,13 @@ func CreateComment(ctx context.Context, episodeID, userID int, comment string) e
 
 	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
-		return fmt.Errorf("failed to prepare insert comment: %w", err)
+		return fmt.Errorf("failed PrepareContext: %w", err)
 	}
 	defer stmt.Close()
 
 	_, err = stmt.ExecContext(ctx, comment, episodeID, userID)
 	if err != nil {
-		return fmt.Errorf("failed to insert comment into comments %w", err)
+		return fmt.Errorf("failed ExecContext: %w", err)
 	}
 
 	return nil
@@ -76,12 +76,12 @@ func UpdateCommentLikes(ctx context.Context, commentID int) (int, error) {
 
 	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
-		return -1, fmt.Errorf("failed to prepare update: %w", err)
+		return -1, fmt.Errorf("failed PrepareContext for update: %w", err)
 	}
 
 	_, err = stmt.ExecContext(ctx, commentID)
 	if err != nil {
-		return -1, fmt.Errorf("failed to update likes from comments: %w", err)
+		return -1, fmt.Errorf("failed ExecContext: %w", err)
 	}
 	stmt.Close()
 
@@ -89,14 +89,14 @@ func UpdateCommentLikes(ctx context.Context, commentID int) (int, error) {
 
 	stmt, err = DB.PrepareContext(ctx, query)
 	if err != nil {
-		return -1, fmt.Errorf("failed to prepare select: %w", err)
+		return -1, fmt.Errorf("failed PrepareContext for select: %w", err)
 	}
 	defer stmt.Close()
 
 	var likes int
 	err = stmt.QueryRowContext(ctx, commentID).Scan(&likes)
 	if err != nil {
-		return -1, fmt.Errorf("failed to select likes from comments: %w", err)
+		return -1, fmt.Errorf("failed QueryRowContext: %w", err)
 	}
 
 	return likes, nil

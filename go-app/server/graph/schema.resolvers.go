@@ -16,8 +16,8 @@ import (
 func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (string, error) {
 	err := dbcontrol.CreateComment(ctx, input.EpisodeID, input.UserID, input.Comment)
 	if err != nil {
-		log.Printf("Create Comment %v", err)
-		return "", gqlerror.Errorf("server error")
+		log.Printf("CreateComment of mutationResolver %v", err)
+		return "", gqlerror.Errorf("Server error: failed to create comment")
 	}
 	return "Success to create comment", nil
 }
@@ -25,7 +25,8 @@ func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewCom
 func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, error) {
 	likes, err := dbcontrol.UpdateCommentLikes(ctx, commentID)
 	if err != nil {
-		return likes, gqlerror.Errorf("server error")
+		log.Printf("PushLike of mutationResolver %v", err)
+		return likes, gqlerror.Errorf("Server error: failed to increase likes")
 	}
 	return likes, nil
 }
@@ -35,7 +36,7 @@ func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.P
 	dbPrograms, err := dbcontrol.GetPrograms(ctx, search)
 	if err != nil {
 		log.Printf("Programs of queryResolver %v", err)
-		return nil, gqlerror.Errorf("server error")
+		return nil, gqlerror.Errorf("Server error: failed to get programs")
 	}
 
 	programs := make([]*model.Program, 0, len(dbPrograms))
@@ -51,7 +52,7 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 	dbEpisodes, err := dbcontrol.GetEpisodes(ctx, input.ProgramID, input.FromDate, input.ToDate)
 	if err != nil {
 		log.Printf("Episodes of queryResolver %v", err)
-		return nil, gqlerror.Errorf("server error")
+		return nil, gqlerror.Errorf("Server error: failed to get episodes")
 	}
 
 	episodes := make([]*model.Episode, 0, len(dbEpisodes))
@@ -66,8 +67,8 @@ func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.C
 
 	dbComments, err := dbcontrol.GetComments(ctx, episodeID)
 	if err != nil {
-		log.Printf("Episodes of queryResolver %v", err)
-		return nil, gqlerror.Errorf("server error")
+		log.Printf("Comments of queryResolver %v", err)
+		return nil, gqlerror.Errorf("Server error: failed to get comments")
 	}
 
 	comments := make([]*model.Comment, 0, len(dbComments))
