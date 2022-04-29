@@ -51,7 +51,7 @@ func TestGetComments(t *testing.T) {
 				t.Errorf("error was not expected while select comments: %s", err)
 			}
 
-			if err = mock.ExpectationsWereMet(); err != nil {
+			if err := mock.ExpectationsWereMet(); err != nil {
 				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
 
@@ -98,13 +98,13 @@ func TestCreateComment(t *testing.T) {
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 		defer cancel()
-		a := c.args
-		err = dbcontrol.CreateComment(ctx, a.episodeID, a.userID, a.comment)
+		args := c.args
+		err = dbcontrol.CreateComment(ctx, args.episodeID, args.userID, args.comment)
 		if err != nil {
 			t.Errorf("error was not expected while insert into comments: %s", err)
 		}
 
-		if err = mock.ExpectationsWereMet(); err != nil {
+		if err := mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %s", err)
 		}
 	}
@@ -148,7 +148,7 @@ func TestUpdateCommentLikes(t *testing.T) {
 			t.Errorf("error was not expected while UpdateCommentLikes: %s", err)
 		}
 
-		if err = mock.ExpectationsWereMet(); err != nil {
+		if err := mock.ExpectationsWereMet(); err != nil {
 			t.Errorf("there were unfulfilled expectations: %s", err)
 		}
 

@@ -50,15 +50,15 @@ func TestGetEpisodes(t *testing.T) {
 
 			c.mockClosure(mock)
 
-			a := c.args
+			args := c.args
 			ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 			defer cancel()
-			episodes, err := dbcontrol.GetEpisodes(ctx, a.programID, a.fromDate, a.toDate)
+			episodes, err := dbcontrol.GetEpisodes(ctx, args.programID, args.fromDate, args.toDate)
 			if err != nil {
 				t.Errorf("error was not expected while select episodes: %s", err)
 			}
 
-			if err = mock.ExpectationsWereMet(); err != nil {
+			if err := mock.ExpectationsWereMet(); err != nil {
 				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
 
