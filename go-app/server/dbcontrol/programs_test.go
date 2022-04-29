@@ -1,8 +1,10 @@
 package dbcontrol_test
 
 import (
+	"context"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/Makoto87/tv-comment-app/go-app/server/dbcontrol"
@@ -42,7 +44,10 @@ func TestGetPrograms(t *testing.T) {
 
 			c.mockClosure(mock)
 
-			programs, err := dbcontrol.GetPrograms(c.input)
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second * 15)
+			defer cancel()
+
+			programs, err := dbcontrol.GetPrograms(ctx, c.input)
 			if err != nil {
 				t.Errorf("error was not expected while select programs: %s", err)
 			}

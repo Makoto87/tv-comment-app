@@ -1,6 +1,9 @@
 package dbcontrol
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type Program struct {
 	ID   int
@@ -8,19 +11,19 @@ type Program struct {
 }
 
 // This function get all programs which part of program name matches argument.
-func GetPrograms(search string) ([]Program, error) {
+func GetPrograms(ctx context.Context, search string) ([]Program, error) {
 	query := "select id, program_name from programs where program_name like ?"
 	if search == "" {
 		search = "%"
 	}
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select id & program_name: %w", err)
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(search)
+	rows, err := stmt.QueryContext(ctx, search)
 	if err != nil {
 		return nil, fmt.Errorf("failed to select program id, program_name by Query: %w", err)
 	}

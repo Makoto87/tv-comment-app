@@ -32,7 +32,7 @@ func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, er
 
 func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.Program, error) {
 
-	dbPrograms, err := dbcontrol.GetPrograms(search)
+	dbPrograms, err := dbcontrol.GetPrograms(ctx, search)
 	if err != nil {
 		log.Printf("Programs of queryResolver %v", err)
 		return nil, gqlerror.Errorf("server error")
@@ -63,7 +63,7 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 }
 
 func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.Comment, error) {
-	
+
 	dbComments, err := dbcontrol.GetComments(episodeID)
 	if err != nil {
 		log.Printf("Episodes of queryResolver %v", err)
