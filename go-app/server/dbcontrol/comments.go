@@ -1,6 +1,9 @@
 package dbcontrol
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type Comment struct {
 	ID       int
@@ -16,16 +19,16 @@ type User struct {
 }
 
 // this get comments which have episodeID
-func GetComments(episodeID int) ([]Comment, error) {
+func GetComments(ctx context.Context, episodeID int) ([]Comment, error) {
 	query := "select comments.id, comments.comment, comments.likes, cast(comments.post_date as unsigned), users.id, users.user_name from comments inner join users on comments.user_id = users.id where episode_id = ?"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select from comments: %w", err)
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(episodeID)
+	rows, err := stmt.QueryContext(ctx, episodeID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to select comment by Query: %w", err)
 	}
@@ -50,16 +53,16 @@ func GetComments(episodeID int) ([]Comment, error) {
 }
 
 // this insert comment into comments. episodeID is primary key, userID is foreign key of users
-func CreateComment(episodeID, userID int, comment string) error {
+func CreateComment(ctx context.Context, episodeID, userID int, comment string) error {
 	query := "insert into comments values(null, ?, ?, ?, now(), 0, now(), now())"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
 		return fmt.Errorf("failed to prepare insert comment: %w", err)
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(comment, episodeID, userID)
+	_, err = stmt.ExecContext(ctx, comment, episodeID, userID)
 	if err != nil {
 		return fmt.Errorf("failed to insert comment into comments %w", err)
 	}
@@ -68,15 +71,15 @@ func CreateComment(episodeID, userID int, comment string) error {
 }
 
 // this add 1 to likes of comment which has commentID
-func UpdateCommentLikes(commentID int) (int, error) {
+func UpdateCommentLikes(ctx context.Context, commentID int) (int, error) {
 	query := "update comments set likes = likes + 1 where id = ?"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
 		return -1, fmt.Errorf("failed to prepare update: %w", err)
 	}
 
-	_, err = stmt.Exec(commentID)
+	_, err = stmt.ExecContext(ctx, commentID)
 	if err != nil {
 		return -1, fmt.Errorf("failed to update likes from comments: %w", err)
 	}
@@ -84,14 +87,14 @@ func UpdateCommentLikes(commentID int) (int, error) {
 
 	query = "select likes from comments where id = ?"
 
-	stmt, err = DB.Prepare(query)
+	stmt, err = DB.PrepareContext(ctx, query)
 	if err != nil {
 		return -1, fmt.Errorf("failed to prepare select: %w", err)
 	}
 	defer stmt.Close()
 
 	var likes int
-	err = stmt.QueryRow(commentID).Scan(&likes)
+	err = stmt.QueryRowContext(ctx, commentID).Scan(&likes)
 	if err != nil {
 		return -1, fmt.Errorf("failed to select likes from comments: %w", err)
 	}

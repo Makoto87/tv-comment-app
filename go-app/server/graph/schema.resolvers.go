@@ -14,7 +14,7 @@ import (
 )
 
 func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (string, error) {
-	err := dbcontrol.CreateComment(input.EpisodeID, input.UserID, input.Comment)
+	err := dbcontrol.CreateComment(ctx, input.EpisodeID, input.UserID, input.Comment)
 	if err != nil {
 		log.Printf("Create Comment %v", err)
 		return "", gqlerror.Errorf("server error")
@@ -23,7 +23,7 @@ func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewCom
 }
 
 func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, error) {
-	likes, err := dbcontrol.UpdateCommentLikes(commentID)
+	likes, err := dbcontrol.UpdateCommentLikes(ctx, commentID)
 	if err != nil {
 		return likes, gqlerror.Errorf("server error")
 	}
@@ -64,7 +64,7 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 
 func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.Comment, error) {
 
-	dbComments, err := dbcontrol.GetComments(episodeID)
+	dbComments, err := dbcontrol.GetComments(ctx, episodeID)
 	if err != nil {
 		log.Printf("Episodes of queryResolver %v", err)
 		return nil, gqlerror.Errorf("server error")
