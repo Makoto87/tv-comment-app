@@ -1,8 +1,10 @@
 package dbcontrol_test
 
 import (
+	"context"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/Makoto87/tv-comment-app/go-app/server/dbcontrol"
@@ -49,7 +51,9 @@ func TestGetEpisodes(t *testing.T) {
 			c.mockClosure(mock)
 
 			a := c.args
-			episodes, err := dbcontrol.GetEpisodes(a.programID, a.fromDate, a.toDate)
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+			defer cancel()
+			episodes, err := dbcontrol.GetEpisodes(ctx, a.programID, a.fromDate, a.toDate)
 			if err != nil {
 				t.Errorf("error was not expected while select episodes: %s", err)
 			}

@@ -48,7 +48,7 @@ func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.P
 
 func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesInput) ([]*model.Episode, error) {
 
-	dbEpisodes, err := dbcontrol.GetEpisodes(input.ProgramID, input.FromDate, input.ToDate)
+	dbEpisodes, err := dbcontrol.GetEpisodes(ctx, input.ProgramID, input.FromDate, input.ToDate)
 	if err != nil {
 		log.Printf("Episodes of queryResolver %v", err)
 		return nil, gqlerror.Errorf("server error")

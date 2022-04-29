@@ -1,6 +1,7 @@
 package dbcontrol
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -10,16 +11,16 @@ type Episode struct {
 }
 
 // this get all episodes which have programID and date between fromDate and toDate
-func GetEpisodes(programID, fromDate, toDate int) ([]Episode, error) {
+func GetEpisodes(ctx context.Context, programID, fromDate, toDate int) ([]Episode, error) {
 	query := "select id, cast(date as unsigned) from episodes where program_id = ? and date between ? and ? order by date desc"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select id, date from episodes: %w", err)
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(programID, fromDate, toDate)
+	rows, err := stmt.QueryContext(ctx, programID, fromDate, toDate)
 	if err != nil {
 		return nil, fmt.Errorf("failed to select episode id, date by Query: %w", err)
 	}
