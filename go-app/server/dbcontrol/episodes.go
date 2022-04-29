@@ -10,7 +10,7 @@ type Episode struct {
 	Date int
 }
 
-// this get all episodes which have programID and date between fromDate and toDate
+// This get all episodes which have programID and date between fromDate and toDate
 func GetEpisodes(ctx context.Context, programID, fromDate, toDate int) ([]Episode, error) {
 	query := "select id, cast(date as unsigned) from episodes where program_id = ? and date between ? and ? order by date desc"
 

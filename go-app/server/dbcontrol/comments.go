@@ -18,7 +18,7 @@ type User struct {
 	Name string
 }
 
-// this get comments which have episodeID
+// This get comments which have episodeID
 func GetComments(ctx context.Context, episodeID int) ([]Comment, error) {
 	query := "select comments.id, comments.comment, comments.likes, cast(comments.post_date as unsigned), users.id, users.user_name from comments inner join users on comments.user_id = users.id where episode_id = ?"
 
@@ -52,7 +52,7 @@ func GetComments(ctx context.Context, episodeID int) ([]Comment, error) {
 	return comments, nil
 }
 
-// this insert comment into comments. episodeID is primary key, userID is foreign key of users
+// This insert comment into comments table. episodeID is primary key, userID is foreign key of users table.
 func CreateComment(ctx context.Context, episodeID, userID int, comment string) error {
 	query := "insert into comments values(null, ?, ?, ?, now(), 0, now(), now())"
 
@@ -70,7 +70,7 @@ func CreateComment(ctx context.Context, episodeID, userID int, comment string) e
 	return nil
 }
 
-// this add 1 to likes of comment which has commentID
+// This add 1 to likes of comment which has commentID. After update likes, this function return number of likes. If error is happened, this function return -1 and error
 func UpdateCommentLikes(ctx context.Context, commentID int) (int, error) {
 	query := "update comments set likes = likes + 1 where id = ?"
 
