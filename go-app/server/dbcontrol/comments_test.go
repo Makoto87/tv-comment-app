@@ -109,3 +109,51 @@ func TestCreateComment(t *testing.T) {
 		}
 	}
 }
+
+func TestUpdateCommentLikes(t *testing.T) {
+
+	cases := []struct {
+		name        string
+		args        int
+		mockClosure func(mock sqlmock.Sqlmock)
+		want        int
+	}{
+		{
+			name: "test1",
+			args: 1,
+			mockClosure: func(mock sqlmock.Sqlmock) {
+				ep := mock.ExpectPrepare("update comments set likes = likes + 1 where id = ?")
+				ep.ExpectExec().WithArgs(1).WillReturnResult(sqlmock.NewResult(1, 1))
+				ep = mock.ExpectPrepare("select likes from comments where id = ?")
+				ep.ExpectQuery().WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{"likes"}).AddRow(3))
+			},
+			want: 3,
+		},
+	}
+
+	for _, c := range cases {
+		db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+		if err != nil {
+			t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+		}
+		defer db.Close()
+
+		dbcontrol.DB = db
+		c.mockClosure(mock)
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+		defer cancel()
+		likes, err := dbcontrol.UpdateCommentLikes(ctx, c.args)
+		if err != nil {
+			t.Errorf("error was not expected while UpdateCommentLikes: %s", err)
+		}
+
+		if err = mock.ExpectationsWereMet(); err != nil {
+			t.Errorf("there were unfulfilled expectations: %s", err)
+		}
+
+		if likes != c.want {
+			t.Errorf("Want: %#v \nGot: %#v", c.want, likes)
+		}
+	}
+}
