@@ -61,3 +61,51 @@ func TestGetComments(t *testing.T) {
 		})
 	}
 }
+
+func TestCreateComment(t *testing.T) {
+	type args struct {
+		episodeID int
+		userID    int
+		comment   string
+	}
+
+	cases := []struct {
+		name        string
+		args        args
+		mockClosure func(mock sqlmock.Sqlmock)
+		want        error
+	}{
+		{
+			name: "test1",
+			args: args{episodeID: 1, userID: 1, comment: "create test comment"},
+			mockClosure: func(mock sqlmock.Sqlmock) {
+				ep := mock.ExpectPrepare("insert into comments values(null, ?, ?, ?, now(), 0, now(), now())")
+				ep.ExpectExec().WithArgs("create test comment", 1, 1).WillReturnResult(sqlmock.NewResult(1, 1))
+			},
+			want: nil,
+		},
+	}
+
+	for _, c := range cases {
+		db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+		if err != nil {
+			t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+		}
+		defer db.Close()
+
+		dbcontrol.DB = db
+		c.mockClosure(mock)
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+		defer cancel()
+		a := c.args
+		err = dbcontrol.CreateComment(ctx, a.episodeID, a.userID, a.comment)
+		if err != nil {
+			t.Errorf("error was not expected while insert into comments: %s", err)
+		}
+
+		if err = mock.ExpectationsWereMet(); err != nil {
+			t.Errorf("there were unfulfilled expectations: %s", err)
+		}
+	}
+}
