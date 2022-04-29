@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -19,11 +21,17 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	gqltest := flag.Bool("gqltest", false, "when gqltest flag is used, GraphQL playground is opened")
+	flag.Parse()
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	if *gqltest {
+		fmt.Println("GraphQL playground is used")
+		http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	}
+
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 	http.Handle("/query", srv)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	fmt.Println("GraphQL server is connected")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
