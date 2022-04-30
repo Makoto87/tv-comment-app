@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -40,20 +41,20 @@ func main() {
 	}
 
 	go func() {
-		fmt.Println("GraphQL server is connecting")
-		if err := httpServer.ListenAndServe(); err != nil {
+		log.Println("GraphQL server is connecting")
+		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("HTTP server ListenAndServe: %v", err)
 		}
 	}()
 
-	sigint := make(chan os.Signal, 1)
-	signal.Notify(sigint, os.Interrupt)
-	<-sigint
-	fmt.Println("HTTP server Shutdown start")
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	<-sigs
+	log.Println("HTTP server Shutdown start")
 
-	timeoutCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
-	if err := httpServer.Shutdown(timeoutCtx); err != nil {
+	if err := httpServer.Shutdown(ctx); err != nil {
 		log.Printf("HTTP server Shutdown: %v", err)
 	}
 }
