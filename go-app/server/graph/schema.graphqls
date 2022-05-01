@@ -1,0 +1,45 @@
+type Program {
+      id: Int!
+      name: String!
+}
+
+type Episode {
+      id: Int!
+      date: Int!
+}
+
+type Comment {
+      id: Int!
+      comment: String!
+      likes: Int!
+      user: User!
+      postDate: String!
+}
+
+type User {
+      id: Int!
+      name: String!
+}
+
+input QueryEpisodesInput {
+    programID: Int!
+    fromDate: Int! = 0
+    toDate: Int! = 99999999
+}
+
+type Query {
+      programs(search: String! = ""): [Program!]!
+      episodes(input: QueryEpisodesInput!): [Episode!]!
+      comments(episodeID: Int!): [Comment!]!
+}
+
+input NewComment {
+      episodeID: Int!
+      comment: String!
+      userID: Int!
+}
+
+type Mutation {
+      createComment(input: NewComment!): String!
+      pushLike(commentID: Int!): Int!
+}
