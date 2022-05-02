@@ -9,7 +9,6 @@ import { memo } from 'react'
 
 export const Home = memo(() => {
       // テストデータ
-      const programTitles: string[] = [...Array(50).fill("テスト")];
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -23,7 +22,8 @@ export const Home = memo(() => {
                         {/* 番組一覧を表示 */}
                         <VStack w={{ base: '100%', md: '85%'}}>
                               <Text w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg'>ホーム</Text>
-                              <ProgramList buttonType='programs' titles={programTitles} />
+                              <ProgramList title={""}/>
+                              {/* <ProgramList buttonType='programs' titles={programTitles} /> */}
                         </VStack>
                   </Flex>
             </HeaderLayout>
