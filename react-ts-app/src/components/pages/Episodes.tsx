@@ -5,10 +5,11 @@ import { Link } from "react-router-dom"
 
 import { PostButton } from "../parts/PostButton"
 import { ProgramList } from "../parts/ProgramList"
+import { EpisodeList } from "../parts/EpisodeList"
 import { RangeTime } from "../parts/RangeTime"
 import { HeaderLayout } from "../templates/HeaderLayout"
 
-export const Program = memo(() => {
+export const Episodes = memo(() => {
       // テストデータ
       const programNumbers: string[] = [...Array(50).fill("123")]
       return (
@@ -34,7 +35,8 @@ export const Program = memo(() => {
                               </Breadcrumb>
 
                               {/* 放送回を表示 */}
-                              <ProgramList buttonType="comments" titles={programNumbers}/>
+                              {/* <ProgramList buttonType="comments" titles={programNumbers}/> */}
+                              <EpisodeList titles={programNumbers}/>
                         </VStack>
                   </Flex>
             </HeaderLayout>

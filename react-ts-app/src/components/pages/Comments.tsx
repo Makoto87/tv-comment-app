@@ -27,7 +27,7 @@ export const Comments = memo(() => {
                                           <BreadcrumbLink as = { Link } to='/'>ホーム</BreadcrumbLink>
                                     </BreadcrumbItem>
                                     <BreadcrumbItem>
-                                          <BreadcrumbLink as = { Link } to='/programs'>放送回</BreadcrumbLink>
+                                          <BreadcrumbLink as = { Link } to='/episodes'>放送回</BreadcrumbLink>
                                     </BreadcrumbItem>
                                     <BreadcrumbItem>
                                           <BreadcrumbLink isCurrentPage>コメント</BreadcrumbLink>
