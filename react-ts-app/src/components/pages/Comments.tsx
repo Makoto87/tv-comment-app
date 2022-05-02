@@ -10,6 +10,7 @@ import { memo } from "react"
 
 export const Comments = memo(() => {
       const testStrings: string[] = [...Array(50).fill("hoge hoge hoge")]
+      const navigate = useNavigate();
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -27,7 +28,9 @@ export const Comments = memo(() => {
                                           <BreadcrumbLink as = { Link } to='/'>ホーム</BreadcrumbLink>
                                     </BreadcrumbItem>
                                     <BreadcrumbItem>
-                                          <BreadcrumbLink as = { Link } to='/episodes'>放送回</BreadcrumbLink>
+                                          <BreadcrumbLink>
+                                                <span onClick={() => navigate(-1)}>放送回</span>
+                                          </BreadcrumbLink>
                                     </BreadcrumbItem>
                                     <BreadcrumbItem>
                                           <BreadcrumbLink isCurrentPage>コメント</BreadcrumbLink>

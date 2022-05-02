@@ -57,7 +57,7 @@ export const EpisodeList: VFC<Props> = memo((props) => {
             <Wrap w='95%' py={{ base: 8}} px={{ md: 10 }} justify='space-around' >
                   {data?.episodes.map((episode) => (
                         <WrapItem mx='auto' p={3}>
-                              <Button onClick={() => navigate("comments")} whiteSpace='unset' colorScheme='green' w={{ base: '200px', md: '300px' }} h={{ base: '100px', md: '150px'}} fontSize={{ md: '2xl'}}>
+                              <Button key={episode.id} onClick={() => navigate("comments")} whiteSpace='unset' colorScheme='green' w={{ base: '200px', md: '300px' }} h={{ base: '100px', md: '150px'}} fontSize={{ md: '2xl'}}>
                                     {episode.date}
                               </Button>
                         </WrapItem>

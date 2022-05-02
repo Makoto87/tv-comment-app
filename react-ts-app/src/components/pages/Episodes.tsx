@@ -1,15 +1,16 @@
 import { ChevronRightIcon } from "@chakra-ui/icons"
 import { Flex, VStack, Text, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
-import { memo } from "react"
-import { Link } from "react-router-dom"
+import { memo, useState } from "react"
+import { Link, useLocation } from "react-router-dom"
 
 import { PostButton } from "../parts/PostButton"
-import { ProgramList } from "../parts/ProgramList"
 import { EpisodeList } from "../parts/EpisodeList"
 import { RangeTime } from "../parts/RangeTime"
 import { HeaderLayout } from "../templates/HeaderLayout"
 
 export const Episodes = memo(() => {
+      const location = useLocation()
+      const [selectId, setSelectId] = useState<{ id: number }>(location.state as { id: number })
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -33,8 +34,7 @@ export const Episodes = memo(() => {
                               </Breadcrumb>
 
                               {/* 放送回を表示 */}
-                              {/* <ProgramList buttonType="comments" titles={programNumbers}/> */}
-                              <EpisodeList titleID={432}/>
+                              <EpisodeList titleID={selectId.id}/>
                         </VStack>
                   </Flex>
             </HeaderLayout>
