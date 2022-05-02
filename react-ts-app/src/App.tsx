@@ -1,21 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
-import { Button, ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme/theme';
-import { Home } from './components/pages/Home';
 import { Program } from './components/pages/Program';
-import { Comments } from './components/pages/Comments';
 import { BrowserRouter } from 'react-router-dom';
 import { Router } from './router/Router';
 
+import { useQuery, gql } from "@apollo/client";
+
+const FETCH_BOOKS = gql`
+      query {
+            programs(search: "test%") {
+                  id
+                  name
+            }
+      }
+`;
+
+interface Program {
+      id: number;
+      name: string;
+}
+
+interface ProgramsData {
+      programs: Program[];
+}
+
 function App() {
-return (
-      <ChakraProvider theme={theme}>
-            <BrowserRouter>
-                  <Router />
-            </BrowserRouter>
-      </ChakraProvider>
-    )
+      const { data } = useQuery<ProgramsData>(FETCH_BOOKS);
+      console.log(data)
+      data && data.programs.map(program => console.log(program.name))
+      
+      return (
+            <ChakraProvider theme={theme}>
+                  <BrowserRouter>
+                        <Router />
+                  </BrowserRouter>
+            </ChakraProvider>
+      )
 }
 
 export default App;
