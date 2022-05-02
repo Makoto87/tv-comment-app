@@ -15,6 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/Makoto87/tv-comment-app/go-app/server/graph"
 	"github.com/Makoto87/tv-comment-app/go-app/server/graph/generated"
+	"github.com/rs/cors"
 )
 
 const defaultPort = "8080"
@@ -33,8 +34,14 @@ func main() {
 		http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	}
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+		Debug: true,
+	})
+
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
-	http.Handle("/query", srv)
+	http.Handle("/query", c.Handler(srv))
 
 	httpServer := &http.Server{
 		Addr: ":" + port,
