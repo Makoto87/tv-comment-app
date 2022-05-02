@@ -11,6 +11,7 @@ import { HeaderLayout } from "../templates/HeaderLayout"
 export const Episodes = memo(() => {
       const location = useLocation()
       const [selectId, setSelectId] = useState<{ id: number }>(location.state as { id: number })
+      console.log(selectId.id)
       return (
             // ヘッダーを取得
             <HeaderLayout>

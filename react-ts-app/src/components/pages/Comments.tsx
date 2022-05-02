@@ -1,16 +1,18 @@
 import { ChevronRightIcon } from "@chakra-ui/icons"
 import { Flex, VStack, Text, Button, HStack, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 
 import { SubList } from "../parts/SubList"
 import { CommentList } from "../parts/CommentList"
 import { PostButton } from "../parts/PostButton"
 import { HeaderLayout } from "../templates/HeaderLayout"
-import { memo } from "react"
+import { memo, useState } from "react"
 
 export const Comments = memo(() => {
-      const testStrings: string[] = [...Array(50).fill("hoge hoge hoge")]
       const navigate = useNavigate();
+      const location = useLocation()
+      const [selectId, setSelectId] = useState<{ episodeID: number }>(location.state as { episodeID: number })
+      console.log(selectId.episodeID)
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -37,7 +39,7 @@ export const Comments = memo(() => {
                                     </BreadcrumbItem>
                               </Breadcrumb>
                               {/* コメント一覧を表示 */}
-                              <CommentList texts={testStrings} />
+                              <CommentList episodeID={selectId.episodeID} />
                         </VStack>
                   </Flex>
             </HeaderLayout>
