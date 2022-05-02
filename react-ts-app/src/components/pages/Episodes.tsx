@@ -10,8 +10,6 @@ import { RangeTime } from "../parts/RangeTime"
 import { HeaderLayout } from "../templates/HeaderLayout"
 
 export const Episodes = memo(() => {
-      // テストデータ
-      const programNumbers: string[] = [...Array(50).fill("123")]
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -36,7 +34,7 @@ export const Episodes = memo(() => {
 
                               {/* 放送回を表示 */}
                               {/* <ProgramList buttonType="comments" titles={programNumbers}/> */}
-                              <EpisodeList titles={programNumbers}/>
+                              <EpisodeList titleID={432}/>
                         </VStack>
                   </Flex>
             </HeaderLayout>

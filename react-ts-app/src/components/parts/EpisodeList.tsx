@@ -29,33 +29,36 @@ interface QueryEpisodesInput {
   }
 
 type Props = {
-      titles: string[]
+      titleID: number
 }
 
 export const EpisodeList: VFC<Props> = memo((props) => {
-      const { titles } = props;
+      const { titleID } = props;
       const navigate = useNavigate();
 
-      // const args: QueryEpisodesInput = {programID: 2}
-
-      const { data } = useQuery<EpisodesData>(FETCH_EPISODES,
+      const { loading, error, data } = useQuery<EpisodesData>(FETCH_EPISODES,
             {variables: {
                   input: {
-                        programID: 432,
+                        programID: titleID,
                   }
             }}
       );
-      console.log(data)
-      console.log("read now")
-      data && console.log("read data")
-      data && data.episodes.map(episode => console.log(episode.date))
+      console.log(data, loading, error)
+
+      if (loading) return (
+            <h1>Loading Now</h1>
+      );
+
+      if (error)   return (
+            <h1>Server Error</h1>
+      );
 
       return (
             <Wrap w='95%' py={{ base: 8}} px={{ md: 10 }} justify='space-around' >
-                  {titles.map((title) => (
+                  {data?.episodes.map((episode) => (
                         <WrapItem mx='auto' p={3}>
                               <Button onClick={() => navigate("comments")} whiteSpace='unset' colorScheme='green' w={{ base: '200px', md: '300px' }} h={{ base: '100px', md: '150px'}} fontSize={{ md: '2xl'}}>
-                                    {title}
+                                    {episode.date}
                               </Button>
                         </WrapItem>
                   ))}
