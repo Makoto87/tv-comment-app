@@ -5,10 +5,11 @@ import { SubList } from '../parts/SubList'
 import { PostButton } from '../parts/PostButton'
 import { ProgramList } from '../parts/ProgramList'
 import { HeaderLayout } from '../templates/HeaderLayout'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 
 export const Home = memo(() => {
-      // テストデータ
+      const [text, setText] = useState<String>("")
+      console.log(text)
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -16,13 +17,13 @@ export const Home = memo(() => {
                         {/* 新規投稿ボタンとカテゴリーリスト */}
                         <VStack w={{ base: '100%', md: '15%' }} spacing={{ base: '4', md: '5'}} pt={{ base: '3', md: '10'}} pb={ {base: '6', md: '0'}}>
                               <PostButton />
-                              <SubList />
+                              <SubList setText={setText} />
                         </VStack>
 
                         {/* 番組一覧を表示 */}
                         <VStack w={{ base: '100%', md: '85%'}}>
                               <Text w='100%' paddingX={{ base: '1', md: '7'}} fontSize='lg'>ホーム</Text>
-                              <ProgramList title={""}/>
+                              <ProgramList title={text.valueOf()}/>
                               {/* <ProgramList buttonType='programs' titles={programTitles} /> */}
                         </VStack>
                   </Flex>

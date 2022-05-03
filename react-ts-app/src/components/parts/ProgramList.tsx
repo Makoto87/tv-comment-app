@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 
 const FETCH_PROGRAMS = gql`
-      query {
-            programs(search: "") {
+      query getPrograms($search: String!) {
+            programs(search: $search) {
                   id
                   name
             }
@@ -29,6 +29,7 @@ type Props = {
 export const ProgramList: VFC<Props> = memo((props) => {
       const { title } = props;
       const navigate = useNavigate();
+      console.log(title)
 
       const { loading, error, data } = useQuery<ProgramsData>(FETCH_PROGRAMS, 
             {variables: {

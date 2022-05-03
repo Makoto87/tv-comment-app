@@ -20,7 +20,7 @@ export const Comments = memo(() => {
                         {/* 新規投稿ボタンと放送回リスト */}
                         <VStack w={{ base: '100%', md: '15%' }} spacing={{ base: '4', md: '5'}} pt={{ base: '3', md: '10'}} pb={ {base: '6', md: '0'}}>
                               <PostButton />
-                              <SubList />
+                              {/* <SubList /> */}
                         </VStack>
 
                         <VStack w={{ base: '100%', md: '85%'}}>
