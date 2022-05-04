@@ -1,7 +1,7 @@
 import { Wrap, WrapItem, Button } from "@chakra-ui/react"
-import { memo, ReactNode, VFC } from "react";
+import { memo, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { ProgramContext } from '../templates/HeaderLayout'
 import { useQuery, gql } from "@apollo/client";
 
 const FETCH_PROGRAMS = gql`
@@ -22,18 +22,14 @@ interface ProgramsData {
       programs: Program[];
 }
 
-type Props = {
-      title: string
-}
-
-export const ProgramList: VFC<Props> = memo((props) => {
-      const { title } = props;
+export const ProgramList = memo(() => {
+      const { programSubstr } = useContext(ProgramContext);
       const navigate = useNavigate();
-      console.log(title)
+      console.log(programSubstr)
 
       const { loading, error, data } = useQuery<ProgramsData>(FETCH_PROGRAMS, 
             {variables: {
-                  search: title
+                  search: programSubstr
             }}
       );
       console.log(data, loading, error);

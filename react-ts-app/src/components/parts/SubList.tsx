@@ -1,15 +1,12 @@
-import { Box, Heading, VStack, Button, Stack, HStack, Wrap, WrapItem } from "@chakra-ui/react"
-import { memo, VFC, Dispatch, SetStateAction } from "react"
+import { Box, Heading, Button, Wrap, WrapItem } from "@chakra-ui/react"
+import { memo, useContext } from "react"
+import { ProgramContext } from '../templates/HeaderLayout'
 
-type Props = {
-      setText: Dispatch<SetStateAction<String>>;
-}
-
-export const SubList: VFC<Props> = memo((props) => {
-      const {setText} = props
+export const SubList = memo(() => {
+      const { setProgramSubstr } = useContext(ProgramContext);
       const hiraganaArray: String[] = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん".split('');
-      const changeText = (char: String) => {
-            setText(char);
+      const changeText = (char: string) => {
+            setProgramSubstr(char);
       }
       return (
             <Box w='100%' >
