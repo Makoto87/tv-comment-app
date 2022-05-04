@@ -16,14 +16,27 @@ export const ProgramContext = createContext({} as {
 export const HeaderLayout: VFC<Props> = memo((props) => {
       const { children } = props;
       const [programSubstr, setProgramSubstr] = useState("");
+      const [searchText, setsearchText] = useState("");
+
+      const onChangeSearchBar = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setsearchText(() => e.target.value)
+      }
+      const onClickSearchBar = () => {
+            setProgramSubstr("%" + searchText + "%")
+
+      }
       return (
             <ProgramContext.Provider value={{programSubstr, setProgramSubstr}}>
                   <Link to="/" onClick={() => {setProgramSubstr("")}}>
                         <Heading as='h1' size='lg' mt={5} pl={8} pb={5}>TV Comment App</Heading>
                   </Link>
                   <InputGroup px={8} paddingBottom={5} size='lg' >
-                        <Input bg="white" placeholder='検索' />
-                        <InputRightAddon p={0} children={<IconButton aria-label='Search database' icon={<SearchIcon />} />} />
+                        <Input onChange={onChangeSearchBar} bg="white" placeholder='番組名を検索' />
+                        <InputRightAddon onClick={onClickSearchBar} p={0}>
+                              <Link to="/">
+                                    <IconButton aria-label='Search database' icon={<SearchIcon />} />
+                              </Link>
+                        </InputRightAddon>
                   </InputGroup>
                   {children}
             </ProgramContext.Provider>
