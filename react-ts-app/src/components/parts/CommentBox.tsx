@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { memo, useState, VFC } from "react";
+
 import { GoodButton } from "./GoodButton";
 
 type Props = {

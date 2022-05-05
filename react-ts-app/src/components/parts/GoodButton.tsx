@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react"
 import { memo, VFC } from "react";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 
 type Props = {
       commentID: number

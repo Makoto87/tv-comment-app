@@ -1,8 +1,9 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, VStack, FormControl, FormLabel, Input, Text, Textarea, Flex } from "@chakra-ui/react"
 import { memo, useState } from "react";
+import { gql, useMutation } from "@apollo/client";
+
 import { useMessage } from "../../hooks/usetMessage";
 import { SetTime } from "./SetTime";
-import { useQuery, gql, useMutation } from "@apollo/client";
 
 const SAVE_COMMENT = gql`
       mutation createComment($input: NewComment!) {
@@ -18,7 +19,6 @@ interface NewComment {
 }
 
 export const PostButton = memo(() => {
-      // Modalに使用する関数
       const { isOpen, onOpen, onClose } = useDisclosure()
 
       const [ count, setCount ] = useState(0);
@@ -32,6 +32,7 @@ export const PostButton = memo(() => {
             setCount(event.target.value.length)
             setText(event.target.value)
       }
+
       const showPostModal = () => {
             setCount(0)
             onOpen()
@@ -42,10 +43,8 @@ export const PostButton = memo(() => {
             setProgramName(event.target.value)
       }
 
-      // 投稿ボタン押した後のメッセージ
       const { showMessage } = useMessage();
 
-      // 投稿ボタン押した時の処理
       const [createComment] = useMutation<{createComment: string}>(SAVE_COMMENT)
 
       const onClickPostButton = () => {

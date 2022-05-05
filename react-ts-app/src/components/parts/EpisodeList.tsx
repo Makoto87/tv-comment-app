@@ -1,7 +1,6 @@
 import { Wrap, WrapItem, Button } from "@chakra-ui/react"
 import { memo, VFC } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useQuery, gql } from "@apollo/client";
 
 const FETCH_EPISODES = gql`
@@ -37,9 +36,6 @@ type Props = {
 export const EpisodeList: VFC<Props> = memo((props) => {
       const { titleID, fromDate, toDate } = props;
       const navigate = useNavigate();
-
-      console.log(fromDate)
-      console.log(toDate)
 
       const { loading, error, data } = useQuery<EpisodesData>(FETCH_EPISODES,
             {variables: {

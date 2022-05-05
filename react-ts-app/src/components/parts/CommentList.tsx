@@ -1,6 +1,7 @@
-import { Wrap, WrapItem, Button, VStack, Box, Text, Flex } from "@chakra-ui/react"
+import { VStack } from "@chakra-ui/react"
 import { memo, VFC } from "react";
 import { useQuery, gql } from "@apollo/client";
+
 import { CommentBox } from "./CommentBox";
 
 const FETCH_COMMENTS = gql`
