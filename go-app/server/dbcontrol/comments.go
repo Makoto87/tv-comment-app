@@ -2,7 +2,9 @@ package dbcontrol
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"log"
 )
 
 type Comment struct {
@@ -52,19 +54,43 @@ func GetComments(ctx context.Context, episodeID int) ([]Comment, error) {
 	return comments, nil
 }
 
-// This insert comment into comments table. episodeID is primary key, userID is foreign key of users table.
-func CreateComment(ctx context.Context, episodeID, userID int, comment string) error {
-	query := "insert into comments values(null, ?, ?, ?, now(), 0, now(), now())"
+// This insert comment into comments table if programName and episodeDate is exist. episodeID is primary key, userID is foreign key of users table.
+func CreateComment(ctx context.Context, comment, programName string, episodeDate, userID int) error {
+
+	query := "select id from episodes where date = ? and program_id = (select id from programs where program_name = ?)"
 
 	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
-		return fmt.Errorf("failed PrepareContext: %w", err)
+		log.Printf("failed PrepareContext for QueryRow: %v", err)
+		return fmt.Errorf("サーバーエラーが発生しました")
+	}
+
+	var episodeID int
+	err = stmt.QueryRowContext(ctx, episodeDate, programName).Scan(&episodeID)
+	if err == sql.ErrNoRows {
+		log.Printf("query result is empty: %v", err)
+		return fmt.Errorf("番組名または放送年月日が一致する回が存在しません")
+	}
+	if err != nil {
+		log.Printf("failed QueryRowContext: %v", err)
+		return fmt.Errorf("サーバーエラーが発生しました")
+	}
+
+	stmt.Close()
+
+	query = "insert into comments values(null, ?, ?, ?, now(), 0, now(), now())"
+
+	stmt, err = DB.PrepareContext(ctx, query)
+	if err != nil {
+		log.Printf("failed PrepareContext for ExecContext: %v", err)
+		return fmt.Errorf("サーバーエラーが発生しました")
 	}
 	defer stmt.Close()
 
 	_, err = stmt.ExecContext(ctx, comment, episodeID, userID)
 	if err != nil {
-		return fmt.Errorf("failed ExecContext: %w", err)
+		log.Printf("failed ExecContext: %v", err)
+		return fmt.Errorf("サーバーエラーが発生しました")
 	}
 
 	return nil

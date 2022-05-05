@@ -64,9 +64,10 @@ func TestGetComments(t *testing.T) {
 
 func TestCreateComment(t *testing.T) {
 	type args struct {
-		episodeID int
-		userID    int
-		comment   string
+		comment     string
+		programName string
+		episodeDate int
+		userID      int
 	}
 
 	cases := []struct {
@@ -77,10 +78,12 @@ func TestCreateComment(t *testing.T) {
 	}{
 		{
 			name: "test1",
-			args: args{episodeID: 1, userID: 1, comment: "create test comment"},
+			args: args{comment: "create test comment", programName: "test1", episodeDate: 20220414, userID: 1},
 			mockClosure: func(mock sqlmock.Sqlmock) {
-				ep := mock.ExpectPrepare("insert into comments values(null, ?, ?, ?, now(), 0, now(), now())")
-				ep.ExpectExec().WithArgs("create test comment", 1, 1).WillReturnResult(sqlmock.NewResult(1, 1))
+				ep := mock.ExpectPrepare("select id from episodes where date = ? and program_id = (select id from programs where program_name = ?)")
+				ep.ExpectQuery().WithArgs(20220414, "test1").WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(191))
+				ep = mock.ExpectPrepare("insert into comments values(null, ?, ?, ?, now(), 0, now(), now())")
+				ep.ExpectExec().WithArgs("create test comment", 191, 1).WillReturnResult(sqlmock.NewResult(1, 1))
 			},
 			want: nil,
 		},
@@ -99,7 +102,7 @@ func TestCreateComment(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 		defer cancel()
 		args := c.args
-		err = dbcontrol.CreateComment(ctx, args.episodeID, args.userID, args.comment)
+		err = dbcontrol.CreateComment(ctx, args.comment, args.programName, args.episodeDate, args.userID)
 		if err != nil {
 			t.Errorf("error was not expected while insert into comments: %s", err)
 		}
