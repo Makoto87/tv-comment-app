@@ -23,7 +23,6 @@ export const HeaderLayout: VFC<Props> = memo((props) => {
       }
       const onClickSearchBar = () => {
             setProgramSubstr("%" + searchText + "%")
-
       }
       return (
             <ProgramContext.Provider value={{programSubstr, setProgramSubstr}}>
