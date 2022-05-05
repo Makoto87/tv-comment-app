@@ -38,7 +38,7 @@ export const ProgramList = memo(() => {
             <h1>Loading Now</h1>
       );
 
-      if (error)   return (
+      if (error) return (
             <h1>Server Error</h1>
       );
 

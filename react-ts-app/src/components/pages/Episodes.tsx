@@ -10,8 +10,10 @@ import { HeaderLayout } from "../templates/HeaderLayout"
 
 export const Episodes = memo(() => {
       const location = useLocation()
-      const [selectId, setSelectId] = useState<{ id: number }>(location.state as { id: number })
-      console.log(selectId.id)
+      const [selectId] = useState<{ id: number }>(location.state as { id: number })
+
+      const [ fromDate, setFromDate ] = useState(0)
+      const [ toDate, setToDate ] = useState(99999999)
       return (
             // ヘッダーを取得
             <HeaderLayout>
@@ -19,7 +21,7 @@ export const Episodes = memo(() => {
                         {/* 新規投稿ボタンと時間指定 */}
                         <VStack w={{ base: '100%', md: '15%' }} spacing={{ base: '4', md: '5'}} pt={{ base: '3', md: '10'}} pb={ {base: '6', md: '0'}}>
                               <PostButton />
-                              <RangeTime />
+                              <RangeTime setFromDate={setFromDate} setToDate={setToDate} />
                         </VStack>
                         
                         <VStack w={{ base: '100%', md: '85%'}}>
@@ -35,7 +37,7 @@ export const Episodes = memo(() => {
                               </Breadcrumb>
 
                               {/* 放送回を表示 */}
-                              <EpisodeList titleID={selectId.id}/>
+                              <EpisodeList titleID={selectId.id} fromDate={fromDate} toDate={toDate} />
                         </VStack>
                   </Flex>
             </HeaderLayout>

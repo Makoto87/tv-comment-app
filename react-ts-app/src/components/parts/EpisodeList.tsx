@@ -30,16 +30,23 @@ interface QueryEpisodesInput {
 
 type Props = {
       titleID: number
+      fromDate: number
+      toDate: number
 }
 
 export const EpisodeList: VFC<Props> = memo((props) => {
-      const { titleID } = props;
+      const { titleID, fromDate, toDate } = props;
       const navigate = useNavigate();
+
+      console.log(fromDate)
+      console.log(toDate)
 
       const { loading, error, data } = useQuery<EpisodesData>(FETCH_EPISODES,
             {variables: {
                   input: {
                         programID: titleID,
+                        fromDate: fromDate,
+                        toDate: toDate,
                   }
             }}
       );

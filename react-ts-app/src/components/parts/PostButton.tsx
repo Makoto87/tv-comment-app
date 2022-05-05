@@ -65,10 +65,6 @@ export const PostButton = memo(() => {
             let numberYear = Number(year);
             let numberMonth = Number(month);
             let numberDay = Number(day);
-            if (numberYear == NaN || numberMonth == NaN || numberDay == NaN) {
-                  showMessage( {title: '年月日には数字を入れてください', status: 'error'});
-                  return;
-            }
 
             let date = numberYear * (10**4) + numberMonth * (10 ** 2) + numberDay;
 
