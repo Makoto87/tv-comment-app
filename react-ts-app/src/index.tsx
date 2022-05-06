@@ -4,9 +4,27 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {
+      ApolloClient,
+      InMemoryCache,
+      ApolloProvider,
+      createHttpLink,
+} from "@apollo/client";
+
+const link = createHttpLink({
+      uri: "http://localhost:8080/query",
+});
+
+const client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: link,
+});
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <ApolloProvider client={client}>
+            <App />
+      </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

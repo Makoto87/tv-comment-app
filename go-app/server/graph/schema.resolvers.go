@@ -14,10 +14,9 @@ import (
 )
 
 func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (string, error) {
-	err := dbcontrol.CreateComment(ctx, input.EpisodeID, input.UserID, input.Comment)
+	err := dbcontrol.CreateComment(ctx, input.Comment, input.ProgramName, input.EpisodeDate, input.UserID)
 	if err != nil {
-		log.Printf("CreateComment of mutationResolver %v", err)
-		return "", gqlerror.Errorf("Server error: failed to create comment")
+		return "", err
 	}
 	return "Success to create comment", nil
 }
@@ -32,7 +31,6 @@ func (r *mutationResolver) PushLike(ctx context.Context, commentID int) (int, er
 }
 
 func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.Program, error) {
-
 	dbPrograms, err := dbcontrol.GetPrograms(ctx, search)
 	if err != nil {
 		log.Printf("Programs of queryResolver %v", err)
@@ -48,7 +46,6 @@ func (r *queryResolver) Programs(ctx context.Context, search string) ([]*model.P
 }
 
 func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesInput) ([]*model.Episode, error) {
-
 	dbEpisodes, err := dbcontrol.GetEpisodes(ctx, input.ProgramID, input.FromDate, input.ToDate)
 	if err != nil {
 		log.Printf("Episodes of queryResolver %v", err)
@@ -64,7 +61,6 @@ func (r *queryResolver) Episodes(ctx context.Context, input model.QueryEpisodesI
 }
 
 func (r *queryResolver) Comments(ctx context.Context, episodeID int) ([]*model.Comment, error) {
-
 	dbComments, err := dbcontrol.GetComments(ctx, episodeID)
 	if err != nil {
 		log.Printf("Comments of queryResolver %v", err)

@@ -1,32 +1,88 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, VStack, FormControl, FormLabel, Input, Text, Textarea, Flex } from "@chakra-ui/react"
 import { memo, useState } from "react";
+import { gql, useMutation } from "@apollo/client";
+
 import { useMessage } from "../../hooks/usetMessage";
 import { SetTime } from "./SetTime";
 
+const SAVE_COMMENT = gql`
+      mutation createComment($input: NewComment!) {
+            createComment(input: $input)
+      }
+`;
+
+interface NewComment {
+      comment: string
+      programName: string
+      episodeDate: number
+      userID: number
+}
+
 export const PostButton = memo(() => {
-      // Modalに使用する関数
       const { isOpen, onOpen, onClose } = useDisclosure()
 
-      // 文字数カウントをする
       const [ count, setCount ] = useState(0);
-      // テキストエリアの文字が変わるたびにカウント
+      const [ text, setText ] = useState("");
+      const [ programName, setProgramName ] = useState("");
+      const [ year, setYear ] = useState("");
+      const [ month, setMonth ] = useState("");
+      const [ day, setDay ] = useState("");
+
       const onChangeTextArea = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
             setCount(event.target.value.length)
+            setText(event.target.value)
       }
+
       const showPostModal = () => {
             setCount(0)
             onOpen()
       }
-      // 投稿ボタン押した後のメッセージ
+
+      const onChangeProgramName = (event: React.ChangeEvent<HTMLInputElement>) => {
+            console.log(event.target.value)
+            setProgramName(event.target.value)
+      }
+
       const { showMessage } = useMessage();
 
+      const [createComment] = useMutation<{createComment: string}>(SAVE_COMMENT)
+
       const onClickPostButton = () => {
-            console.log(count);
-            if (count <= 140) {
-                  showMessage( {title: '成功', status: 'success'})
-            } else {
-                  showMessage( {title: '文字数オーバー', status: 'error'})
+            if (programName == "") {
+                  showMessage( {title: '番組名を記入してください', status: 'error'});
+                  return
             }
+            if (count <= 0) {
+                  showMessage( {title: 'コメントを記入してください', status: 'error'});
+                  return
+            }
+            if (count > 140) {
+                  showMessage( {title: '文字数オーバー', status: 'error'});
+                  return;
+            }
+
+            let numberYear = Number(year);
+            let numberMonth = Number(month);
+            let numberDay = Number(day);
+
+            let date = numberYear * (10**4) + numberMonth * (10 ** 2) + numberDay;
+
+            createComment({
+                  variables: {
+                        input: {
+                              comment: text,
+                              programName: programName,
+                              episodeDate: date,
+                              userID: 1,
+                        }
+                  }
+            }).then(() => {
+                  showMessage( {title: 'コメント投稿成功', status: 'success'});
+                  onClose();
+            }).catch((res) => {
+                  console.log(res)
+                  showMessage( {title: '失敗：　サーバーエラー', status: 'error'});
+            });
       }
 
       return (
@@ -44,11 +100,11 @@ export const PostButton = memo(() => {
                                     <VStack spacing={4}>
                                          <FormControl>
                                                 <FormLabel>番組名</FormLabel>
-                                                <Input />
+                                                <Input onChange={(event) => onChangeProgramName(event)} />
                                           </FormControl> 
                                          <FormControl>
                                                 <FormLabel>放送日</FormLabel>
-                                                <SetTime />
+                                                <SetTime setYear={setYear} setMonth={setMonth} setDay={setDay} />
                                           </FormControl> 
                                          <FormControl>
                                                 <FormLabel>コメント(140字まで)</FormLabel>

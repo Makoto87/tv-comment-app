@@ -34,8 +34,9 @@ type Query {
 }
 
 input NewComment {
-      episodeID: Int!
       comment: String!
+      programName: String!
+      episodeDate: Int!
       userID: Int!
 }
 

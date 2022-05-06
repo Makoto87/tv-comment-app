@@ -341,8 +341,9 @@ type Query {
 }
 
 input NewComment {
-      episodeID: Int!
       comment: String!
+      programName: String!
+      episodeDate: Int!
       userID: Int!
 }
 
@@ -3186,19 +3187,27 @@ func (ec *executionContext) unmarshalInputNewComment(ctx context.Context, obj in
 
 	for k, v := range asMap {
 		switch k {
-		case "episodeID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("episodeID"))
-			it.EpisodeID, err = ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "comment":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comment"))
 			it.Comment, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "programName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("programName"))
+			it.ProgramName, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "episodeDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("episodeDate"))
+			it.EpisodeDate, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
