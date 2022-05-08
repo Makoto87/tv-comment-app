@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 )
 
 type Comment struct {
@@ -61,19 +60,16 @@ func CreateComment(ctx context.Context, comment, programName string, episodeDate
 
 	stmt, err := DB.PrepareContext(ctx, query)
 	if err != nil {
-		log.Printf("failed PrepareContext for QueryRow: %v", err)
-		return fmt.Errorf("サーバーエラーが発生しました")
+		return fmt.Errorf("failed PrepareContext for QueryRowContext: %w", err)
 	}
 
 	var episodeID int
 	err = stmt.QueryRowContext(ctx, episodeDate, programName).Scan(&episodeID)
 	if err == sql.ErrNoRows {
-		log.Printf("query result is empty: %v", err)
-		return fmt.Errorf("番組名または放送年月日が一致する回が存在しません")
+		return fmt.Errorf("query result is empty: %w", err)
 	}
 	if err != nil {
-		log.Printf("failed QueryRowContext: %v", err)
-		return fmt.Errorf("サーバーエラーが発生しました")
+		return fmt.Errorf("failed QueryRowContext: %w", err)
 	}
 
 	stmt.Close()
@@ -82,15 +78,13 @@ func CreateComment(ctx context.Context, comment, programName string, episodeDate
 
 	stmt, err = DB.PrepareContext(ctx, query)
 	if err != nil {
-		log.Printf("failed PrepareContext for ExecContext: %v", err)
-		return fmt.Errorf("サーバーエラーが発生しました")
+		return fmt.Errorf("failed PrepareContext for ExecContext: %w", err)
 	}
 	defer stmt.Close()
 
 	_, err = stmt.ExecContext(ctx, comment, episodeID, userID)
 	if err != nil {
-		log.Printf("failed ExecContext: %v", err)
-		return fmt.Errorf("サーバーエラーが発生しました")
+		return fmt.Errorf("failed ExecContext: %w", err)
 	}
 
 	return nil
