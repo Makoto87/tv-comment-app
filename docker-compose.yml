@@ -3,25 +3,40 @@ version: '3'
 services:
   react-ts:
     build: ./react-ts-app
+    depends_on:
+      - go-server
     ports:
       - '3000:3000'
     tty: true
     stdin_open: true
     
-  go:
-    build: ./go-app
+  go-gettvinfo:
+    build: ./go-app/gettvinfo
+    depends_on:
+      - db
     ports:
       - '8000:8000'
     tty: true
     stdin_open: true
 
+  go-server:
+    build: ./go-app/server
+    depends_on:
+      - db
+    ports:
+      - '8080:8080'
+    tty: true
+    stdin_open: true
+
   db:
     image: mysql:8.0
+    env_file:
+      - variables.env
+    environment:
+      MYSQL_DATABASE: "go_tvapp"
     volumes:
       - './db/data:/var/lib/mysql'
       - './db/my.cnf:/etc/mysql/conf.d/my.cnf'
-    # MYSQL_ROOT_PASSWORDのみをenvファイルで設定
-    env_file:
-      - variables.env
+      - './db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql'
     ports:
       - '3306:3306'
