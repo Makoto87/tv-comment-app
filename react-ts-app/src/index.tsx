@@ -12,7 +12,7 @@ import {
 } from "@apollo/client";
 
 const link = createHttpLink({
-      uri: "http://localhost:8080/query",
+      uri: `http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}/${process.env.REACT_APP_PATH}`,
 });
 
 const client = new ApolloClient({

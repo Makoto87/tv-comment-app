@@ -5,6 +5,8 @@ package graph
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"log"
 
 	"github.com/Makoto87/tv-comment-app/go-app/server/dbcontrol"
@@ -16,7 +18,11 @@ import (
 func (r *mutationResolver) CreateComment(ctx context.Context, input model.NewComment) (string, error) {
 	err := dbcontrol.CreateComment(ctx, input.Comment, input.ProgramName, input.EpisodeDate, input.UserID)
 	if err != nil {
-		return "", err
+		log.Printf("CreateComment of mutationResolver %v", err)
+		if errors.Is(err, sql.ErrNoRows) {
+			return "", gqlerror.Errorf("番組名または放送年月日が一致する回が存在しません")
+		}
+		return "", gqlerror.Errorf("サーバーエラーが発生しました")
 	}
 	return "Success to create comment", nil
 }
