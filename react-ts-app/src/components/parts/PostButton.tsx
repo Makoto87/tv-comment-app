@@ -1,8 +1,8 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, VStack, FormControl, FormLabel, Input, Text, Textarea, Flex } from "@chakra-ui/react"
 import { memo, useState } from "react";
-import { gql, useMutation } from "@apollo/client";
+import { gql, isApolloError, useMutation } from "@apollo/client";
 
-import { useMessage } from "../../hooks/usetMessage";
+import { useMessage } from "../../hooks/useMessage";
 import { SetTime } from "./SetTime";
 
 const SAVE_COMMENT = gql`
@@ -39,7 +39,6 @@ export const PostButton = memo(() => {
       }
 
       const onChangeProgramName = (event: React.ChangeEvent<HTMLInputElement>) => {
-            console.log(event.target.value)
             setProgramName(event.target.value)
       }
 
@@ -79,9 +78,12 @@ export const PostButton = memo(() => {
             }).then(() => {
                   showMessage( {title: 'コメント投稿成功', status: 'success'});
                   onClose();
-            }).catch((res) => {
-                  console.log(res)
-                  showMessage( {title: '失敗：　サーバーエラー', status: 'error'});
+            }).catch((err) => {
+                  if (isApolloError(err)) {
+                        showMessage( {title: '失敗：　' + err.graphQLErrors[0]["message"], status: 'error'});
+                  } else {
+                        showMessage( {title: '失敗：　サーバーエラー', status: 'error'});
+                  }
             });
       }
 
