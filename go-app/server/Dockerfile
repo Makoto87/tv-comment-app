@@ -5,5 +5,5 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags timetzdata -o ./app ./s
 
 FROM alpine:3.15
 WORKDIR /go/server
-COPY --from=builder /go/server/app /go/server/go.env ./
+COPY --from=builder /go/server/app ./
 ENTRYPOINT ["./app"]

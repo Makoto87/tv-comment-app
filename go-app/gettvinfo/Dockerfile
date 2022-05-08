@@ -5,6 +5,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags timetzdata -o ./app ./c
 
 FROM alpine:3.15
 WORKDIR /go/gettvinfo
-COPY --from=builder /go/gettvinfo/app /go/gettvinfo/go.env ./
+COPY --from=builder /go/gettvinfo/app ./
 RUN apk add chromium
 ENTRYPOINT ["./app"]
