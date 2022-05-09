@@ -4,12 +4,15 @@ import (
 	"time"
 
 	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
 )
 
 // get all texts of selectors from url, return texts as string slice
 func Scraping(url, selector string) []string {
 
-	browser := rod.New().MustConnect()
+	path, _ := launcher.LookPath()
+	u := launcher.New().Bin(path).MustLaunch()
+	browser := rod.New().ControlURL(u).MustConnect()
 	defer browser.MustClose()
 
 	page := browser.MustPage(url)

@@ -21,10 +21,20 @@ import (
 const defaultPort = "8080"
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
+	serverPort := os.Getenv("PORT")
+	if serverPort == "" {
+		serverPort = defaultPort
 	}
+
+	host, okHost := os.LookupEnv("CLIENT_HOST")
+	clientPort, okClientPort := os.LookupEnv("CLIENT_PORT")
+	if !okHost {
+		host = "localhost"
+	}
+	if !okClientPort {
+		clientPort = "3000"
+	}
+	origin := fmt.Sprintf("http://%s:%s", host, clientPort)
 
 	gqltest := flag.Bool("gqltest", false, "when gqltest flag is used, GraphQL playground is opened")
 	flag.Parse()
@@ -35,7 +45,7 @@ func main() {
 	}
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedOrigins:   []string{origin},
 		AllowCredentials: true,
 		Debug: true,
 	})
@@ -44,7 +54,7 @@ func main() {
 	http.Handle("/query", c.Handler(srv))
 
 	httpServer := &http.Server{
-		Addr: ":" + port,
+		Addr: ":" + serverPort,
 	}
 
 	go func() {
