@@ -26,15 +26,10 @@ func main() {
 		serverPort = defaultPort
 	}
 
-	host, okHost := os.LookupEnv("CLIENT_HOST")
-	clientPort, okClientPort := os.LookupEnv("CLIENT_PORT")
-	if !okHost {
-		host = "localhost"
+	origin, okOrigin:= os.LookupEnv("CLIENT_ORIGIN")
+	if !okOrigin {
+		origin = "http://localhost:3000"
 	}
-	if !okClientPort {
-		clientPort = "3000"
-	}
-	origin := fmt.Sprintf("http://%s:%s", host, clientPort)
 
 	gqltest := flag.Bool("gqltest", false, "when gqltest flag is used, GraphQL playground is opened")
 	flag.Parse()
