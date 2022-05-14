@@ -11,7 +11,7 @@ import (
 func Scraping(url, selector string) []string {
 
 	path, _ := launcher.LookPath()
-	u := launcher.New().Bin(path).MustLaunch()
+	u := launcher.New().Set("no-sandbox").Bin(path).MustLaunch()
 	browser := rod.New().ControlURL(u).MustConnect()
 	defer browser.MustClose()
 
