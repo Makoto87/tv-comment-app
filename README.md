@@ -10,6 +10,59 @@
 
 URL: https://tvcomment.net/
 
+# 使用技術
+### フロントエンド
+- React 17.0.2
+- TypeScript 4.6.2
+- ChakraUI
+- Apollo
+
+### バックエンド
+- golang 1.18
+
+### DB
+- MySQL 8.0
+
+### 通信
+- GraphQL
+
+### インフラ
+- Docker / docker-compose(開発環境用)
+- AWS ( ECS(Fargate), ECR, ALB, ACM, Route53, CloudFront, RDS, IGW, S3, VPC, IAM, CloudWatch, EC2(RDSへの踏み台サーバー用) )
+
+### その他使用ツール
+- VS Code
+- draw.io (DB設計・インフラ構成図作成)
+- Canva (favicon作成)
+
+# DB設計
+ER図  
+
+![tv_comments_er](https://user-images.githubusercontent.com/52909609/168416302-defc02ae-2644-41c6-94a7-46625330591e.png)
+
+# インフラ構成
+![infra](https://user-images.githubusercontent.com/52909609/168596742-6c91380d-fef6-4249-beef-f1d74619bbf5.png)
+
+# 要件
+### 機能要件
+- 番組一覧を表示  
+      - 50音ボタンで表示する番組を絞ることができる  
+      - 検索バーで表示する番組を絞ることができる
+- 番組に紐づく放送日を表示  
+      - 日付を指定して、表示する放送日を絞ることができる
+- 番組・放送日に紐づくコメントを表示
+- コメントにいいねができる
+- パンくずリストの設置
+- コメント投稿ボタンの設置  
+      - 番組名・放送日が一致するものがなければエラー
+- 日にちが変わるたびに、その日放送されるテレビ番組名・放送日を取得してDBを更新する  
+
+### 非機能要件
+- コメント投稿機能ではSQLインジェクションを防ぐ
+- レスポンスが来なかったらエラーを表示
+- SSL/TLS通信にする
+- SPAの実装
+
 # 利用方法
 ### 番組一覧の表示
 上記のリンクを開くと番組一覧が表示されます。  
@@ -43,59 +96,6 @@ https://user-images.githubusercontent.com/52909609/167537086-c6e1637b-72d6-4a57-
 # アプリ作成の背景
 テレビやYoutubeを視聴することが多く、Youtubeでは動画と共にコメントをよく見ていました。  
 ただテレビ番組にはコメントの共有がないため、テレビ番組専用のコメント共有アプリがあったら使ってみたい・需要がありそうと考えて作成しました。  
-
-# 要件
-### 機能要件
-- 番組一覧を表示  
-      - 50音ボタンで表示する番組を絞ることができる  
-      - 検索バーで表示する番組を絞ることができる
-- 番組に紐づく放送日を表示  
-      - 日付を指定して、表示する放送日を絞ることができる
-- 番組・放送日に紐づくコメントを表示
-- コメントにいいねができる
-- パンくずリストの設置
-- コメント投稿ボタンの設置  
-      - 番組名・放送日が一致するものがなければエラー
-- 日にちが変わるたびに、その日放送されるテレビ番組名・放送日を取得してDBを更新する  
-
-### 非機能要件
-- コメント投稿機能ではSQLインジェクションを防ぐ
-- レスポンスが来なかったらエラーを表示
-- SSL/TLS通信にする
-- SPAの実装
-
-# 使用技術
-### フロントエンド
-- React 17.0.2
-- TypeScript 4.6.2
-- ChakraUI
-- Apollo
-
-### バックエンド
-- golang 1.18
-
-### DB
-- MySQL 8.0
-
-### 通信
-- GraphQL
-
-### インフラ
-- Docker / docker-compose(開発環境用)
-- AWS ( ECS(Fargate), ECR, ALB, ACM, Route53, CloudFront, RDS, IGW, S3, VPC, IAM, CloudWatch, EC2(RDSへの踏み台サーバー用) )
-
-### その他使用ツール
-- VS Code
-- draw.io (DB設計・インフラ構成図作成)
-- Canva (favicon作成)
-
-# DB設計
-ER図  
-
-![tv_comments_er](https://user-images.githubusercontent.com/52909609/168416302-defc02ae-2644-41c6-94a7-46625330591e.png)
-
-# インフラ構成
-![infra](https://user-images.githubusercontent.com/52909609/168419959-89962ed0-cd1c-4c43-8a82-740ce3b8791c.png)
 
 # その他
 - 作成時間： 約2ヶ月（250 ~ 300時間）  
