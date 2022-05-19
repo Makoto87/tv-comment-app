@@ -56,6 +56,7 @@ func ProgramInsert(programs []string) error {
 	if err != nil {
 		return fmt.Errorf("failed to prepare insert program: %w", err)
 	}
+	defer stmt.Close()
 
 	if _, err := stmt.Exec(vals...); err != nil {
 		return fmt.Errorf("failed to insert program: %w", err)
@@ -85,6 +86,7 @@ func EpisodeInsert(programs []string) error {
 	if err != nil {
 		return fmt.Errorf("failed to prepare insert episode: %w", err)
 	}
+	defer stmt.Close()
 
 	if _, err := stmt.Exec(vals...); err != nil {
 		return fmt.Errorf("failed to insert episode: %w", err)
@@ -106,11 +108,14 @@ func selectID(programs []string) ([]int, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to prepare select program id: %w", err)
 	}
+	defer stmt.Close()
 
 	rows, err := stmt.Query(vals...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to Query id from programs where program_name in args: %w", err)
 	}
+	defer rows.Close()
+	
 	var ids []int
 	for rows.Next() {
 		var id int
