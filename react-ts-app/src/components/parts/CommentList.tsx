@@ -48,7 +48,6 @@ export const CommentList: VFC<Props> = memo((props) => {
                   episodeID: episodeID
             }}
       );
-      console.log(data, loading, error?.networkError )
 
       if (loading) return (
             <h1>Loading Now</h1>

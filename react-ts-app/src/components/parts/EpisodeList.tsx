@@ -46,7 +46,6 @@ export const EpisodeList: VFC<Props> = memo((props) => {
                   }
             }}
       );
-      console.log(data, loading, error)
 
       if (loading) return (
             <h1>Loading Now</h1>
