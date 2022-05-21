@@ -25,14 +25,12 @@ interface ProgramsData {
 export const ProgramList = memo(() => {
       const { programSubstr } = useContext(ProgramContext);
       const navigate = useNavigate();
-      console.log(programSubstr)
 
       const { loading, error, data } = useQuery<ProgramsData>(FETCH_PROGRAMS, 
             {variables: {
                   search: programSubstr
             }}
       );
-      console.log(data, loading, error);
 
       if (loading) return (
             <h1>Loading Now</h1>
