@@ -1,10 +1,11 @@
 import { Button } from "@chakra-ui/react"
-import { memo, VFC } from "react";
+import { Dispatch, memo, VFC } from "react";
 import { gql, useMutation } from "@apollo/client";
 
 type Props = {
       commentID: number
-      setLikes: React.Dispatch<React.SetStateAction<number>>
+      setLikes: Dispatch<React.SetStateAction<number>>
+      setPushedButton: Dispatch<React.SetStateAction<boolean>>
 }
 
 const PUSH_LIKE = gql`
@@ -14,7 +15,7 @@ const PUSH_LIKE = gql`
 `
 
 export const GoodButton: VFC<Props> = memo((props) => {
-      const {commentID, setLikes} = props
+      const {commentID, setLikes, setPushedButton} = props
 
       const [pushLike] = useMutation<{pushLike: number}>(PUSH_LIKE, {
             variables: {
@@ -24,6 +25,7 @@ export const GoodButton: VFC<Props> = memo((props) => {
 
       const onClickPushLike = () =>  {
             pushLike().then((res) => {
+                  setPushedButton(true)
                   setLikes(res.data!.pushLike)
             })
       }
