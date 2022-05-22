@@ -1,10 +1,11 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { memo, useState, VFC } from "react";
+import { memo, useState, VFC, Dispatch } from "react";
 
 import { GoodButton } from "./GoodButton";
 
 type Props = {
       comment: Comment
+      setPushedButton: Dispatch<React.SetStateAction<boolean>>
 }
 
 interface Comment {
@@ -21,7 +22,7 @@ interface User {
 }
 
 export const CommentBox: VFC<Props> = memo((props) => {
-      const { comment } = props
+      const { comment, setPushedButton } = props
 
       const [ likes, setLikes ] = useState(comment.likes)
 
@@ -32,7 +33,7 @@ export const CommentBox: VFC<Props> = memo((props) => {
                         <Text flexGrow={2} pb={{base: '1', md: '0'}}>{comment.user.name}</Text>
                         <Text flexGrow={4} pb={{base: '3', md: '0'}}>{comment.postDate}</Text>
                         <Flex alignItems='center' pb={{base: '2', md: '0'}}>
-                              <GoodButton commentID={comment.id} setLikes={setLikes}></GoodButton>
+                              <GoodButton commentID={comment.id} setLikes={setLikes} setPushedButton={setPushedButton}></GoodButton>
                               <Text flexGrow={10} pl='3'>{likes}</Text>
                         </Flex>
                   </Flex>
