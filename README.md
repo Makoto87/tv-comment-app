@@ -41,7 +41,7 @@ ER図
 ![tv_comments_er](https://user-images.githubusercontent.com/52909609/168416302-defc02ae-2644-41c6-94a7-46625330591e.png)
 
 # インフラ構成
-![infra](https://user-images.githubusercontent.com/52909609/168596742-6c91380d-fef6-4249-beef-f1d74619bbf5.png)
+![infra](https://user-images.githubusercontent.com/52909609/170266784-dcd8f20a-2f02-4cbc-9d4b-5485aa013f7c.png)
 
 # 要件
 ### 機能要件
