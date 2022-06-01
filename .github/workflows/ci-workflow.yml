@@ -1,0 +1,23 @@
+name: CI Workflow for tv-comment-app
+
+on: [push]
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+
+    - name: Success
+      uses:
+      if: success()
+
+    - name: Failure
+      uses:
+      if: failure()
+
+    - name: Cancel
+      uses:
+      if: cancelled()
