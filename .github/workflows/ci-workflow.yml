@@ -3,16 +3,18 @@ name: CI Workflow for tv-comment-app
 on: [push]
 
 jobs:
-  ci:
-    name: ci
+  go_server_test:
+    name: go server test
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./go-app/server
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: run all containers
+    - name: run test
       run: |
-        docker-compose build
-        docker-compose up -d
+        go test ./... -v
