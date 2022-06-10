@@ -11,10 +11,26 @@ jobs:
       run:
         working-directory: ./go-app/server
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_PASSWORD: root
+          MYSQL_USER: root
+          MYSQL_DATABASE: "test_go_tvapp"
+        ports:
+          - 3306:3306
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
     - name: run test
+      env:
+          MYSQL_PASSWORD: root
+          MYSQL_USER: root
+          DATABASE_NAME: test_go_tvapp
+          HOST: localhost
+          CLIENT_ORIGIN: http://localhost:3000
       run: |
-        go test ./... -v
+        go test ./dbcontrol -v
