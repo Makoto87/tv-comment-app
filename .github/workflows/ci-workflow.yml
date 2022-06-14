@@ -37,4 +37,4 @@ jobs:
           HOST: localhost
           CLIENT_ORIGIN: http://localhost:3000
       run: |
-        go test ./dbcontrol -v
+        go test -v -race ./dbcontrol
