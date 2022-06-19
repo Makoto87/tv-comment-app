@@ -20,7 +20,7 @@ jobs:
         ports:
           - 3306:3306
         volumes:
-          - '.e2e//my.cnf:/etc/mysql/conf.d/my.cnf'
+          - '.e2e/my.cnf:/etc/mysql/conf.d/my.cnf'
           - '.e2e/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql'
         options: >-
           --health-cmd "mysqladmin ping"
