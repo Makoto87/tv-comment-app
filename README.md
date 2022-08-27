@@ -8,7 +8,7 @@
 
 表示される番組と放送日は関東放送に準拠しています。  
 
-URL: https://tvcomment.net/
+URL: ~~https://tvcomment.net/~~ (現在は使えません)
 
 # 使用技術
 ### フロントエンド
